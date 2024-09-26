@@ -1,11 +1,26 @@
 Package: HEMAscRaper
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tools for Scraping and Analyzing HEMA Ratings Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Giuliano Gianneti
+Maintainer: Giuliano Gianneti <yourself@somewhere.net>
+Description: HEMAscRaper provides tools to scrape data from the Historical European Martial Arts (HEMA) Ratings website. 
+    It includes functions to download and parse information on fighters, clubs, events, and tournament results. 
+    The package is designed to facilitate analysis and exploration of HEMA data, making it easy for users to access structured 
+    information for research, visualization, or integration with other datasets.
+    The package uses `rvest` for web scraping and `dplyr` for data manipulation, ensuring compatibility with common R workflows.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    dplyr,
+    httr,
+    lubridate,
+    magrittr,
+    purrr,
+    rvest,
+    snakecase,
+    stringr
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 2.10)
