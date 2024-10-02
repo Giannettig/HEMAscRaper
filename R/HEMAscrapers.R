@@ -112,14 +112,23 @@ get_clubs<- function(){
     {row <- .;
     dplyr::tibble(
       club_url=rvest::html_element(row,"a")%>%rvest::html_attr("href"),
-      club_name=rvest::html_element(row,"a")%>%rvest::html_text(),
+      club_name=rvest::html_element(row,"a")%>%rvest::html_text()%>%stringr::str_squish(),
       club_id=stringr::str_extract(club_url, "\\d+")%>%as.numeric(),
       club_country=rvest::html_element(row,"i")%>%rvest::html_attr("title"),
      )
     }
 
   clubs_table<-web_page%>%
-    rvest::html_element("table")%>%rvest::html_table()%>%dplyr::select(-Country)%>%dplyr::rename(club_name=Name, club_state=State,club_city=City,club_members=Fighters)
+    rvest::html_element("table")%>%
+    rvest::html_table()%>%dplyr::select(-Country)%>%
+    dplyr::mutate(Name=Name%>%stringr::str_remove( "^\\s*-|-$")%>%stringr::str_squish())%>%
+    dplyr::rename(
+      club_name=Name,
+      club_state=State,
+      club_city=City,
+      club_members=Fighters)%>%.[!duplicated(.$club_name),]
+
+
 
 
   #I deal here with sub_clubs and their parent organization
@@ -155,6 +164,7 @@ get_clubs<- function(){
 #' @return A tibble containing events' details with the following columns:
 #' \describe{
 #'   \item{\code{event_id}}{Unique identifier of the event. Integer.}
+#'   \item{\code{event_brand}}{Name of the event brand. Character.}
 #'   \item{\code{event_name}}{Name of the event. Character.}
 #'   \item{\code{event_year}}{Year in which the event took place. Integer.}
 #'   \item{\code{event_date}}{Date of the event in "YYYY-MM-DD" format. Date.}
@@ -203,6 +213,7 @@ get_events<-function(){
 
     dplyr::tibble(
       event_name=row%>%rvest::html_elements(".event-title")%>%rvest::html_text()%>%str_remove(".*-\\s*"),
+      event_brand=event_name%>%str_remove("\\s*\\d{4}$"),
       event_day=row%>%rvest::html_elements(".panel-body")%>%purrr::map(~ rvest::html_elements(.x, "dd")[1])%>% purrr::map_chr(function(x) rvest::html_text(x)),
       event_year=row%>%rvest::html_attr("id")%>%stringr::str_extract( "\\d+")%>%as.numeric(),
       event_date=paste(event_year,event_day," ")%>%as.Date(format = "%Y %B %d"),
@@ -210,7 +221,7 @@ get_events<-function(){
       event_city=row%>%rvest::html_elements(".panel-body")%>%purrr::map(~ rvest::html_elements(.x, "dd")%>%{links<-.;ifelse(length(links)<3,NA,links[3]%>%rvest::html_text(.))})%>%as.character(),
       event_url=row%>%rvest::html_elements(".panel-body")%>%rvest::html_element("a")%>%rvest::html_attr("href"),
       event_id=stringr::str_extract(event_url, "\\d+")%>%as.numeric()
-    )%>%dplyr::select(event_id,event_name,event_year,event_date,event_country,event_city,event_url)
+    )%>%dplyr::select(event_id,event_brand,event_year,event_name,event_date,event_country,event_city,event_url)
 
     }
 
@@ -299,9 +310,9 @@ get_tournament<-function(tournament_url){
         event_id=stringr::str_extract(tournament_url, "\\d+")%>%as.numeric(),
         event_name=web_page%>%rvest::html_element("h2")%>%rvest::html_text(),
         tournament_name=y,
-        event_category=y%>%stringr::str_extract("Mixed|Men's|Women's|Underrepresented Genders"),
-        event_note=y%>%stringr::str_extract("\\(.*\\)")%>%stringr::str_remove_all("[\\(\\)]"),
-        event_weapon=y%>%stringr::str_remove_all("Mixed|Men's|Women's|Underrepresented Genders|\\(.*\\)|-\\s*\\d+\\s*fight[s]?")%>%stringr::str_squish(),
+        tournament_category=y%>%stringr::str_extract("Mixed|Men's|Women's|Underrepresented Genders"),
+        tournament_note=y%>%stringr::str_extract("\\(.*\\)")%>%stringr::str_remove_all("[\\(\\)]"),
+        tournament_weapon=y%>%stringr::str_remove_all("Mixed|Men's|Women's|Underrepresented Genders|\\(.*\\)|-\\s*\\d+\\s*fight[s]?")%>%stringr::str_squish(),
         fighter_id=row %>%rvest::html_elements("a")%>%{links<-.; links[seq(1, length(links), 2)] }%>%rvest::html_attr("href")%>%stringr::str_extract( "\\d+")%>%as.numeric(),
         opponent_id=row %>%rvest::html_elements("a")%>%{links<-.; links[seq(2, length(links), 2)] }%>%rvest::html_attr("href")%>%stringr::str_extract( "\\d+")%>%as.numeric()
       )%>%dplyr::bind_cols(row%>%rvest::html_table())

@@ -21,10 +21,10 @@
 #' @source [HEMA Ratings Clubs Page](https://hemaratings.com/clubs/)
 #'
 #' @examples
-#' data(hema_clubs)
-#' head(hema_clubs)
+#' data(raw_clubs)
+#' head(raw_clubs)
 #'
-"hema_clubs"
+"raw_clubs"
 
 #' HEMA Events Dataset
 #'
@@ -33,8 +33,9 @@
 #' @format A data frame with the following columns:
 #' \describe{
 #'   \item{\code{event_id}}{Unique identifier of the event. Integer.}
-#'   \item{\code{event_name}}{Name of the event. Character.}
+#'   \item{\code{event_brand}}{Name of the event. Character.}
 #'   \item{\code{event_year}}{Year when the event took place. Integer.}
+#'   \item{\code{event_name}}{Name of event edition for the year. Character.}
 #'   \item{\code{event_date}}{Date of the event (format: "YYYY-MM-DD"). Date.}
 #'   \item{\code{event_country}}{Country where the event was held. Character.}
 #'   \item{\code{event_city}}{City where the event took place. Character.}
@@ -48,10 +49,10 @@
 #' @source [HEMA Ratings Events Page](https://hemaratings.com/events/)
 #'
 #' @examples
-#' data(hema_events)
-#' summary(hema_events)
+#' data(raw_events)
+#' summary(raw_events)
 #'
-"hema_events"
+"raw_events"
 
 #' HEMA Fighters Dataset
 #'
@@ -74,10 +75,10 @@
 #' @source [HEMA Ratings Fighters Page](https://hemaratings.com/fighters/)
 #'
 #' @examples
-#' data(hema_fighters)
-#' head(hema_fighters)
+#' data(raw_fighters)
+#' head(raw_fighters)
 #'
-"hema_fighters"
+"raw_fighters"
 
 #' HEMA Fights Dataset
 #'
@@ -88,9 +89,9 @@
 #'   \item{\code{event_id}}{Unique identifier of the event. Integer.}
 #'   \item{\code{event_name}}{Name of the event. Character.}
 #'   \item{\code{tournament_name}}{Name of the specific tournament or discipline within the event. Character.}
-#'   \item{\code{event_category}}{Category of the tournament (e.g., Mixed, Men's, Women's, Underrepresented Genders). Character.}
-#'   \item{\code{event_note}}{Other notes. Character.}
-#'   \item{\code{event_weapon}}{Weapon used in the tournament (e.g., Longsword, Rapier). Character.}
+#'   \item{\code{tournament_category}}{Category of the tournament (e.g., Mixed, Men's, Women's, Underrepresented Genders). Character.}
+#'   \item{\code{tournament_note}}{Other notes. Character.}
+#'   \item{\code{tournament_weapon}}{Weapon used in the tournament (e.g., Longsword, Rapier). Character.}
 #'   \item{\code{fighter_id}}{Unique identifier of the first fighter in a match. Integer.}
 #'   \item{\code{opponent_id}}{Unique identifier of the opponent fighter in a match. Integer.}
 #'   \item{\code{stage}}{Name of the stage. Character.}
@@ -107,7 +108,7 @@
 #' @source [HEMA Ratings Tournament Page](https://hemaratings.com/tournaments/)
 #'
 #' @examples
-#' data(hema_fights)
-#' summary(hema_fights)
+#' data(raw_fights)
+#' summary(raw_fights)
 #'
-"hema_fights"
+"raw_fights"

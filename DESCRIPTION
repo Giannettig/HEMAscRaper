@@ -20,7 +20,12 @@ Imports:
     purrr,
     rvest,
     snakecase,
-    stringr
+    stringr,
+    textclean
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

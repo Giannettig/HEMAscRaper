@@ -10,6 +10,7 @@ get_events()
 A tibble containing events' details with the following columns:
 \describe{
   \item{\code{event_id}}{Unique identifier of the event. Integer.}
+  \item{\code{event_brand}}{Name of the event brand. Character.}
   \item{\code{event_name}}{Name of the event. Character.}
   \item{\code{event_year}}{Year in which the event took place. Integer.}
   \item{\code{event_date}}{Date of the event in "YYYY-MM-DD" format. Date.}
