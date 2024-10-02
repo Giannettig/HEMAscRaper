@@ -1,14 +1,20 @@
-# README for HEMAscRaper
-
-Giuliano Giannetti 2024-10-02
+README for HEMAscRaper
+================
+Giuliano Giannetti
+2024-10-02
 
 # HEMAscRaper
 
-`HEMAscRaper` is an R package designed to scrape and analyze data from the Historical European Martial Arts (HEMA) Ratings website. This README provides a step-by-step guide to using the package to download data on fighters, clubs, events, and tournaments, and to save the resulting datasets for further analysis.
+`HEMAscRaper` is an R package designed to scrape and analyze data from
+the Historical European Martial Arts (HEMA) Ratings website. This README
+provides a step-by-step guide to using the package to download data on
+fighters, clubs, events, and tournaments, and to save the resulting
+datasets for further analysis.
 
 ## Installation
 
-To install the `HEMAscRaper` package, you can use the `devtools` package:
+To install the `HEMAscRaper` package, you can use the `devtools`
+package:
 
 ``` r
 # Uncomment the line below to install the development tools package if not already installed
@@ -26,54 +32,70 @@ library(HEMAscRaper)
 library(dplyr)  # For data manipulation
 ```
 
+Use the `data()` function to load binary data associated with the
+package
+
+``` r
+data(hema_clubs)
+data(hema_fights)
+data(hema_fighters)
+data(hema_events)
+```
+
 ### 2. Download Fighter Data
 
-The `get_fighters()` function scrapes the HEMA Ratings fighters page and returns a structured tibble of all registered fighters.
+The `get_fighters()` function scrapes the HEMA Ratings fighters page and
+returns a structured tibble of all registered fighters.
 
 ``` r
 # Download fighter data
-fighters <- get_fighters()
+hema_fighters <- get_fighters()
 
 # Preview the first few rows of the data
-head(fighters)
+head(hema_fighters)
 
 # Save the fighters data as a CSV file
-write.csv(fighters, "fighters_data.csv", row.names = FALSE)
+write.csv(hema_fighters, "fighters_data.csv", row.names = FALSE)
 ```
 
 ### 3. Download Club Data
 
-The `get_clubs()` function scrapes the HEMA Ratings clubs page and returns a structured tibble with club information.
+The `get_clubs()` function scrapes the HEMA Ratings clubs page and
+returns a structured tibble with club information.
 
 ``` r
 # Download club data
-clubs <- get_clubs()
+hema_clubs <- get_clubs()
 
 # Preview the first few rows of the club data
-head(clubs)
+head(hema_clubs)
 
 # Save the clubs data as a CSV file
-write.csv(clubs, "clubs_data.csv", row.names = FALSE)
+write.csv(hema_clubs, "clubs_data.csv", row.names = FALSE)
 ```
 
 ### 4. Download Event Data
 
-The `get_events()` function scrapes the HEMA Ratings events page and extracts detailed information about HEMA events, including dates, countries, and cities.
+The `get_events()` function scrapes the HEMA Ratings events page and
+extracts detailed information about HEMA events, including dates,
+countries, and cities.
 
 ``` r
 # Download event data
-events <- get_events()
+hema_events <- get_events()
 
 # Preview the first few rows of the event data
-head(events)
+head(hema_events)
 
 # Save the events data as a CSV file
-write.csv(events, "events_data.csv", row.names = FALSE)
+write.csv(hema_events, "events_data.csv", row.names = FALSE)
 ```
 
 ### 5. Download Tournament Data for a Specific Event
 
-The `get_tournament()` function takes a URL to a specific tournament and extracts detailed fight-level information, including tournament names, disciplines, fighters, and match results.
+The `get_tournament()` function takes a URL to a specific tournament and
+extracts detailed fight-level information, including tournament names,
+disciplines, fighters, and match results.
 
 ``` r
 # Example tournament URL
@@ -91,7 +113,10 @@ write.csv(tournament_data, "tournament_data.csv", row.names = FALSE)
 
 ### 6. Download Fight Data for Specific Years
 
-The `get_fights()` function scrapes the HEMA Ratings events page for fight statistics across multiple tournaments, allowing you to filter by specific years. If no year is provided, all available fight data is extracted.
+The `get_fights()` function scrapes the HEMA Ratings events page for
+fight statistics across multiple tournaments, allowing you to filter by
+specific years. If no year is provided, all available fight data is
+extracted.
 
 ``` r
 # Download fight data for the year 2022
@@ -110,8 +135,8 @@ fights_2019_2020 <- get_fights(c(2019, 2020))
 write.csv(fights_2019_2020, "fights_2019_2020_data.csv", row.names = FALSE)
 
 # Download fight data for all available years
-all_fights <- get_fights()
+hema_fights <- get_fights()
 
 # Save all fight data as a CSV file
-write.csv(all_fights, "all_fights_data.csv", row.names = FALSE)
+write.csv(hema_fights, "all_fights_data.csv", row.names = FALSE)
 ```

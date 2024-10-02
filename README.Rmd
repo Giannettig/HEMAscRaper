@@ -28,6 +28,14 @@ devtools::install_github("Giannettig/HEMAscRaper")
 library(HEMAscRaper)
 library(dplyr)  # For data manipulation
 ```
+Use the `data()` function to load binary data associated with the package
+
+``` r
+data(hema_clubs)
+data(hema_fights)
+data(hema_fighters)
+data(hema_events)
+```
 
 ### 2. Download Fighter Data
 
@@ -35,13 +43,13 @@ The `get_fighters()` function scrapes the HEMA Ratings fighters page and returns
 
 ``` r
 # Download fighter data
-fighters <- get_fighters()
+hema_fighters <- get_fighters()
 
 # Preview the first few rows of the data
-head(fighters)
+head(hema_fighters)
 
 # Save the fighters data as a CSV file
-write.csv(fighters, "fighters_data.csv", row.names = FALSE)
+write.csv(hema_fighters, "fighters_data.csv", row.names = FALSE)
 ```
 
 ### 3. Download Club Data
@@ -50,13 +58,13 @@ The `get_clubs()` function scrapes the HEMA Ratings clubs page and returns a str
 
 ``` r
 # Download club data
-clubs <- get_clubs()
+hema_clubs <- get_clubs()
 
 # Preview the first few rows of the club data
-head(clubs)
+head(hema_clubs)
 
 # Save the clubs data as a CSV file
-write.csv(clubs, "clubs_data.csv", row.names = FALSE)
+write.csv(hema_clubs, "clubs_data.csv", row.names = FALSE)
 ```
 
 ### 4. Download Event Data
@@ -65,13 +73,13 @@ The `get_events()` function scrapes the HEMA Ratings events page and extracts de
 
 ``` r
 # Download event data
-events <- get_events()
+hema_events <- get_events()
 
 # Preview the first few rows of the event data
-head(events)
+head(hema_events)
 
 # Save the events data as a CSV file
-write.csv(events, "events_data.csv", row.names = FALSE)
+write.csv(hema_events, "events_data.csv", row.names = FALSE)
 ```
 
 ### 5. Download Tournament Data for a Specific Event
@@ -113,8 +121,8 @@ fights_2019_2020 <- get_fights(c(2019, 2020))
 write.csv(fights_2019_2020, "fights_2019_2020_data.csv", row.names = FALSE)
 
 # Download fight data for all available years
-all_fights <- get_fights()
+hema_fights <- get_fights()
 
 # Save all fight data as a CSV file
-write.csv(all_fights, "all_fights_data.csv", row.names = FALSE)
+write.csv(hema_fights, "all_fights_data.csv", row.names = FALSE)
 ```
