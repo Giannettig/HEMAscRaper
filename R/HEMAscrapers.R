@@ -315,7 +315,7 @@ get_tournament<-function(tournament_url){
         tournament_weapon=y%>%stringr::str_remove_all("Mixed|Men's|Women's|Underrepresented Genders|\\(.*\\)|-\\s*\\d+\\s*fight[s]?")%>%stringr::str_squish(),
         fighter_id=row %>%rvest::html_elements("a")%>%{links<-.; links[seq(1, length(links), 2)] }%>%rvest::html_attr("href")%>%stringr::str_extract( "\\d+")%>%as.numeric(),
         opponent_id=row %>%rvest::html_elements("a")%>%{links<-.; links[seq(2, length(links), 2)] }%>%rvest::html_attr("href")%>%stringr::str_extract( "\\d+")%>%as.numeric()
-      )%>%dplyr::bind_cols(row%>%rvest::html_table())
+      )%>%dplyr::bind_cols(row%>%rvest::html_table())%>%mutate(Stage=as.character(Stage))
 
     })%>%dplyr::bind_rows()
 
@@ -411,6 +411,7 @@ get_fights<-function(year=NULL){
 
   message(paste("Searching Hema Ratings for fights in:", paste(years_to_filter, collapse = ",")))
   fights<-events_url%>%purrr::map_dfr(get_tournament,.progress = TRUE)
+  
   return(fights)
     }
 }
