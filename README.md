@@ -108,7 +108,7 @@ print(viz)
 ```
 
 <figure>
-<img src="Man/Rplot.png" alt="Hema Communities, Longsword 2024" />
+<img src="man/Rplot.png" alt="Hema Communities, Longsword 2024" />
 <figcaption aria-hidden="true">Hema Communities, Longsword
 2024</figcaption>
 </figure>
