@@ -53,6 +53,24 @@ utils::globalVariables(
     "match_id",
     "tournament_id",
     "tournament_note",
-    "tournament_weapon"
+    "tournament_weapon",
+    "edges",
+    "nodes",
+    "Weight",
+    "Community",
+    "Label",
+    "Population",
+    "Region",
+    "Source",
+    "Target",
+    "Source_Label",
+    "Target_Label",
+    "x",
+    "y",
+    "Id",
+    "Line_Type",
+    "Sub_Region",
+    "region",
+    "sub_region"
   )
 )
