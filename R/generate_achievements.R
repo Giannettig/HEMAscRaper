@@ -115,6 +115,6 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
   message("Achievement generation completed in ", round(difftime(end_time, start_time, units = "secs"), 2), " seconds.")
   if(export_csv==TRUE){
   readr::write_csv(achievements, paste0(path,"/hema_achievements.csv"))
-  msg(paste0("Achievements saved in the ", path, " folder."))}
+    message(paste0("Achievements saved in the ", path, " folder."))}
   achievements
 }
