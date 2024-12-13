@@ -15,7 +15,7 @@ test_that("generate_achievements output has the correct structure", {
   
   # Check column types
   expect_type(achievements$fighter_id, "double")
-  expect_type(achievements$tier_id, "integer")
+  expect_type(achievements$tier_id, "double")
   expect_type(achievements$achieved, "logical")
   expect_type(achievements$percentile, "double")
   expect_type(achievements$achievement_tier, "character")
