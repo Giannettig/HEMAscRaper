@@ -66,11 +66,19 @@ ach_king_midas <- function(data) {
     dplyr::left_join(total_fighters, by = "event_year") %>%
     dplyr::mutate(
       percentile = 1 / total_fighters_in_year,
-      achievement_description = stringr::str_replace_all(
-        achievement_description_template,
-        c("\\{gold_medals\\}" = as.character(gold_medals), "\\{event_year\\}" = as.character(event_year))
+      achievement_description = ifelse(
+        is.na(achievement_description_template),
+        NA,  # Keep NA if the template itself is NA
+        stringr::str_replace_all(
+          achievement_description_template,
+          c(
+            "\\{gold_medals\\}" = as.character(gold_medals),
+            "\\{event_year\\}" = as.character(event_year)
+          )
+        )
       )
-    )%>%(ungroup) %>%
+    ) %>%
+    dplyr::ungroup() %>%
     dplyr::select(
       fighter_id,
       tier_id,
@@ -80,7 +88,21 @@ ach_king_midas <- function(data) {
       achievement_name,
       achievement_description,
       achievement_icon
+    ) %>%
+    dplyr::mutate(
+      fighter_id = as.double(fighter_id),  # Ensure correct type
+      tier_id = as.double(tier_id)        # Ensure correct type
     )
+  
+  # Handle case where no achievements exist
+  if (nrow(achievements) == 0) {
+    return(data.frame(
+      fighter_id = double(0), tier_id = double(0), achieved = logical(0),
+      percentile = numeric(0), achievement_tier = character(0),
+      achievement_name = character(0), achievement_description = character(0),
+      achievement_icon = character(0), stringsAsFactors = FALSE
+    ))
+  }
   
   return(achievements)
 }

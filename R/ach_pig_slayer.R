@@ -35,14 +35,13 @@
 #' @importFrom tibble tribble
 #' @keywords internal
 ach_pig_slayer <- function(data) {
-  
   # Define tiers
   tiers <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name,    ~achievement_description,                                            ~achievement_icon,
-    "Epic",            4,        "Pig Slayer!",       "You fought Alexander Stankievich at least 5 times and never lost.",  "pig_slayer_epic.png",
-    "Gold",            3,        "Pig Slayer!",       "You fought Alexander Stankievich at least 5 times.",                "pig_slayer_gold.png",
-    "Silver",          2,        "Pig Slayer!",       "You fought Alexander Stankievich at least 3 times.",                "pig_slayer_silver.png",
-    "Bronze",          1,        "Pig Slayer!",       "You defeated Alexander Stankievich in a match.",                     "pig_slayer_bronze.png"
+    "Epic",            4,        "Pig Slayer!",       "You fought Alexander Stankievich at least 5 times and never lost.", "pig_slayer_epic.png",
+    "Gold",            3,        "Pig Slayer!",       "You fought Alexander Stankievich at least 5 times.",               "pig_slayer_gold.png",
+    "Silver",          2,        "Pig Slayer!",       "You fought Alexander Stankievich at least 3 times.",               "pig_slayer_silver.png",
+    "Bronze",          1,        "Pig Slayer!",       "You defeated Alexander Stankievich in a match.",                   "pig_slayer_bronze.png"
   )
   
   # Summarize victories and losses against opponent_id = 152 (Alexander Stankievich)
@@ -60,18 +59,18 @@ ach_pig_slayer <- function(data) {
     dplyr::mutate(
       tier_id = dplyr::case_when(
         wins >= 5 & losses == 0 ~ 4,  # Epic
-        wins >= 5                ~ 3,  # Gold
-        wins >= 3                ~ 2,  # Silver
-        wins >= 1                ~ 1,  # Bronze
-        TRUE                     ~ NA_integer_
+        wins >= 5               ~ 3,  # Gold
+        wins >= 3               ~ 2,  # Silver
+        wins >= 1               ~ 1,  # Bronze
+        TRUE                    ~ NA_integer_
       )
     ) %>%
     dplyr::filter(!is.na(tier_id))
   
-  # If no achievements, return empty data frame
+  # Handle case where no achievements exist
   if (nrow(achievements) == 0) {
     return(data.frame(
-      fighter_id = integer(0), tier_id = integer(0), achieved = logical(0),
+      fighter_id = double(0), tier_id = double(0), achieved = logical(0),
       percentile = numeric(0), achievement_tier = character(0),
       achievement_name = character(0), achievement_description = character(0),
       achievement_icon = character(0), stringsAsFactors = FALSE
@@ -115,6 +114,10 @@ ach_pig_slayer <- function(data) {
       achievement_name,
       achievement_description,
       achievement_icon
+    ) %>%
+    dplyr::mutate(
+      fighter_id = as.double(fighter_id),  # Ensure correct type
+      tier_id = as.double(tier_id)        # Ensure correct type
     )
   
   return(achievements)

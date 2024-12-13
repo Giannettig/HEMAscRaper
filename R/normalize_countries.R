@@ -22,8 +22,10 @@
 #' }
 #' # [1] "Ukraine" NA "Czechia" "United States of America" "Germany"
 #' @keywords internal
+#' 
+#' # Convert the column to UTF-8 encoding
 normalize_countries <- function(country) {
-  country <- textclean::replace_non_ascii(country) # Remove non-ASCII characters
+  country <- iconv(country,from = "ISO-8859-1", to = "UTF-8", sub = "")%>%textclean::replace_non_ascii() # Remove non-ASCII characters
   dplyr::case_when(
     stringr::str_detect(tolower(country), "ukraine") ~ "Ukraine",
     country == "The nylon (Patreon Bronze-level subscriber)" ~ NA_character_,

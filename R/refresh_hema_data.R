@@ -110,6 +110,6 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
   })
   
   message("calculating HEMA Achievements")
-  generate_achievements(path)
+  generate_achievements(path, TRUE)
   
 }

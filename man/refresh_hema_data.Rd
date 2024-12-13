@@ -16,6 +16,7 @@ None. This function saves the processed data to the specified path as CSV files.
 }
 \description{
 Downloads and processes HEMA ratings data, performing incremental or full updates, and saves the results as CSV files.
+Infividual fencer achievements are calculated and tored in path.
 }
 \examples{
 \dontrun{

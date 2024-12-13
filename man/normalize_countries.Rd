@@ -31,4 +31,11 @@ normalize_countries(countries)
 }
 # [1] "Ukraine" NA "Czechia" "United States of America" "Germany"
 }
+\keyword{#}
+\keyword{Convert}
+\keyword{UTF-8}
+\keyword{column}
+\keyword{encoding}
 \keyword{internal}
+\keyword{the}
+\keyword{to}

@@ -7,6 +7,7 @@
 #' the namespace of the `HEMAscRaper` package.
 #'
 #' @param path Character. Path to the folder containing HEMA data files. Defaults to `./hema_ratings`.
+#' @param export_csv Bool. Will export the achievements list as CSV to Path.
 #'
 #' @return A data frame containing all achievements, with columns:
 #' \describe{
@@ -28,7 +29,7 @@
 #' @examples
 #' generate_achievements("./hema_ratings")
 #' @export
-generate_achievements <- function(path = "./hema_ratings") {
+generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
   start_time <- Sys.time()
   
   # Check if the folder exists
@@ -38,25 +39,25 @@ generate_achievements <- function(path = "./hema_ratings") {
   
   # Import input data
   hema_match_results <- if (file.exists(file.path(path, "hema_match_results.csv"))) {
-    readr::read_csv(file.path(path, "hema_match_results.csv"))
+    readr::read_csv(file.path(path, "hema_match_results.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_match_results
   }
   
   hema_clubs <- if (file.exists(file.path(path, "hema_clubs.csv"))) {
-    readr::read_csv(file.path(path, "hema_clubs.csv"))
+    readr::read_csv(file.path(path, "hema_clubs.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_clubs
   }
   
   hema_events <- if (file.exists(file.path(path, "hema_events.csv"))) {
-    readr::read_csv(file.path(path, "hema_events.csv"))
+    readr::read_csv(file.path(path, "hema_events.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_events
   }
   
   hema_fighters <- if (file.exists(file.path(path, "hema_fighters.csv"))) {
-    readr::read_csv(file.path(path, "hema_fighters.csv"))
+    readr::read_csv(file.path(path, "hema_fighters.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_fighters
   }
@@ -112,7 +113,8 @@ generate_achievements <- function(path = "./hema_ratings") {
   # End computation and print time
   end_time <- Sys.time()
   message("Achievement generation completed in ", round(difftime(end_time, start_time, units = "secs"), 2), " seconds.")
-  
-  return(achievements)
-  read_r::write_csv(achievements, paste0(path,"/hema_achievements.csv"))
+  if(export_csv==TRUE){
+  readr::write_csv(achievements, paste0(path,"/hema_achievements.csv"))
+  msg(paste0("Achievements saved in the ", path, " folder."))}
+  achievements
 }

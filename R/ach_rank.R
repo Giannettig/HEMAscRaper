@@ -8,7 +8,6 @@
 #' @return A data frame of fighters, their ranks, and corresponding achievements for each weapon and year.
 #' @keywords internal
 ach_rank_longsword <- function(data) {
-  
   # Define achievement tiers
   tiers <- dplyr::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name_template, ~achievement_description_template, ~achievement_icon,
@@ -38,7 +37,8 @@ ach_rank_longsword <- function(data) {
       rank = dplyr::row_number(),
       total_fighters = dplyr::n(),
       percentile = rank / total_fighters * 100
-    )
+    ) %>%
+    dplyr::ungroup()
   
   # Assign tiers based on percentiles
   weapon_year_tiers <- weapon_year_stats %>%
@@ -47,7 +47,7 @@ ach_rank_longsword <- function(data) {
         percentile <= 1  ~ 4,  # Epic
         percentile <= 5  ~ 3,  # Gold
         percentile <= 15 ~ 2,  # Silver
-        percentile <= 30 ~ 1,  # Bronze
+        percentile <= 30 ~ 1,  # Bronze,
         TRUE             ~ NA_real_
       )
     ) %>%
@@ -58,23 +58,59 @@ ach_rank_longsword <- function(data) {
     dplyr::left_join(tiers, by = "tier_id") %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      achievement_name = stringr::str_replace_all(
-        achievement_name_template, 
-        c("\\{tournament_weapon\\}" = tournament_weapon, "\\{event_year\\}" = as.character(event_year))
+      achievement_name = ifelse(
+        is.na(achievement_name_template),
+        NA,
+        stringr::str_replace_all(
+          achievement_name_template,
+          c(
+            "\\{tournament_weapon\\}" = ifelse(is.na(tournament_weapon), "unknown weapon", tournament_weapon),
+            "\\{event_year\\}" = ifelse(is.na(event_year), "unknown year", as.character(event_year))
+          )
+        )
       ),
-      achievement_description = stringr::str_replace_all(
-        achievement_description_template, 
-        c("\\{posterior_mean\\}" = sprintf("%.2f", posterior_mean * 100))
-     
+      achievement_description = ifelse(
+        is.na(achievement_description_template),
+        NA,
+        stringr::str_replace_all(
+          achievement_description_template,
+          c(
+            "\\{posterior_mean\\}" = ifelse(
+              is.na(posterior_mean),
+              "N/A",
+              sprintf("%.2f", posterior_mean * 100)
+            )
+          )
+        )
       ),
       achieved = !is.na(achievement_name)
     ) %>%
     dplyr::ungroup() %>%
-    # Select only the required columns in the correct order
+    dplyr::filter(achieved == TRUE) %>%
     dplyr::select(
-      fighter_id, tier_id, achieved, percentile,
-      achievement_tier, achievement_name, achievement_description, achievement_icon
-    )%>%filter(achieved==TRUE)
+      fighter_id,
+      tier_id,
+      achieved,
+      percentile,
+      achievement_tier,
+      achievement_name,
+      achievement_description,
+      achievement_icon
+    ) %>%
+    dplyr::mutate(
+      fighter_id = as.double(fighter_id),  # Ensure correct type
+      tier_id = as.double(tier_id)        # Ensure correct type
+    )
+  
+  # Handle case where no achievements exist
+  if (nrow(achievements) == 0) {
+    return(data.frame(
+      fighter_id = double(0), tier_id = double(0), achieved = logical(0),
+      percentile = numeric(0), achievement_tier = character(0),
+      achievement_name = character(0), achievement_description = character(0),
+      achievement_icon = character(0), stringsAsFactors = FALSE
+    ))
+  }
   
   return(achievements)
 }

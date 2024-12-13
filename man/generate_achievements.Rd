@@ -4,10 +4,12 @@
 \alias{generate_achievements}
 \title{Generate Achievements}
 \usage{
-generate_achievements(path = "./hema_ratings")
+generate_achievements(path = "./hema_ratings", export_csv = FALSE)
 }
 \arguments{
 \item{path}{Character. Path to the folder containing HEMA data files. Defaults to `./hema_ratings`.}
+
+\item{export_csv}{Bool. Will export the achievements list as CSV to Path.}
 }
 \value{
 A data frame containing all achievements, with columns:
