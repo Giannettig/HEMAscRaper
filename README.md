@@ -30,7 +30,8 @@ the `data()` function:
 
 1.  **hema_clubs**: Contains information about HEMA clubs, such as names
     and locations.
-2.  **hema_countries**: Provides country-level data related to HEMA.
+2.  **hema_countries**: Provides country-level data related to HEMA,
+    communities are calculated for Longsword up to 2024
 3.  **hema_events**: Includes details about tournaments and events
     (e.g., names, dates, locations).
 4.  **hema_fighters**: Contains detailed information about individual
@@ -40,6 +41,7 @@ the `data()` function:
     competitors, scores, and outcomes.
 7.  **hema_tournaments**: High-level tournament data, including names,
     dates, and participants.
+8.  **hema_achievements**: Individual fencer achievements.
 
 ### Example: Loading a Dataset
 

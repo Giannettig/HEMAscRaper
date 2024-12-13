@@ -1,6 +1,7 @@
 #' Refresh HEMA Ratings Data
 #'
 #' Downloads and processes HEMA ratings data, performing incremental or full updates, and saves the results as CSV files.
+#' Infividual fencer achievements are calculated and tored in path. 
 #'
 #' @param incremental Logical. If `TRUE`, performs an incremental update of the fights dataset. If `FALSE`, downloads the entire fights dataset. Defaults to `TRUE`.
 #' @param path Character. The directory where the processed CSV files will be saved. Defaults to `"./hema_ratings"`.
@@ -84,6 +85,7 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     dplyr::group_by(tournament_id, tournament_name, event_id, tournament_category, tournament_weapon, tournament_note) %>%
     dplyr::summarize(match_count = dplyr::n_distinct(match_id), fighter_count = dplyr::n_distinct(fighter_id), .groups = "drop")
   
+  
   # Save data as CSV files
   data_list <- list(
     hema_clubs = hema_clubs,
@@ -99,10 +101,15 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     dir.create(path, recursive = TRUE)
   }
   
+  
   message(paste0("Saving the data in the ", path, " directory"))
   
   purrr::walk(names(data_list), function(name) {
     file_path <- file.path(path, paste0(name, ".csv"))
     readr::write_csv(data_list[[name]], file = file_path, na = "")
   })
+  
+  message("calculating HEMA Achievements")
+  generate_achievements(path)
+  
 }

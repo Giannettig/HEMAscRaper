@@ -2,8 +2,8 @@ Package: HEMAscRaper
 Type: Package
 Title: Tools for Downloading and Analyzing HEMA Ratings Data
 Version: 0.1.0
-Author: Giuliano Gianneti
-Maintainer: Giuliano Gianneti <giuliano@seznam.cz>
+Author: Giuliano Giannetti
+Maintainer: Giuliano Giannetti <giuliano@seznam.cz>
 Description: Provides tools to download data from the HEMA Ratings website, including information on fighters, clubs, events, and tournament results. Includes functionality for calculating HEMA communities or "islands" using network graph analysis.
 License: GPL (>= 3)
 Encoding: UTF-8
