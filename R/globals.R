@@ -71,6 +71,22 @@ utils::globalVariables(
     "Line_Type",
     "Sub_Region",
     "region",
-    "sub_region"
+    "sub_region",
+    "achievement_description_template", "achievement_icon", "achievement_name", 
+    "achievement_name_template", "achievement_tier", "alpha_posterior", 
+    "animal_tournaments", "beta_posterior", "club_community", "community", 
+    "community_label", "event_community", "event_name_normalized", "event_region", 
+    "final_matches", "gold_medals", "interval_between_fights", "is_home", "losses", 
+    "match_count", "matches_home", "max_countries", "max_events", "max_interval", 
+    "max_streak", "max_wins", "percentile", "population", "posterior_mean", "result", 
+    "stage_norm", "tier_id", "total_countries", "total_events", "total_fighters", 
+    "total_fighters_in_year", "total_matches", "total_wins", "tournament_count", 
+    "tournaments_attended", "visited_regions", "weapon_count", "win_rate", "wins"
   )
 )
+
+utils::globalVariables(c(
+  "achieved", "achievement_description", "achievement_name", 
+  "tier_id", "percentile", "achievement_tier", "achievement_icon", 
+  "final_matches", "wins", "losses", "event_year", "fighter_id"
+))

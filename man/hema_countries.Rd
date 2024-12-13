@@ -11,6 +11,9 @@ A data frame with the following columns:
   \item{name}{Character. Name of the country.}
   \item{region}{Character. Region of the country.}
   \item{sub_region}{Character. Sub-region of the country.}
+  \item{population}{Int Active Longsword fencers in community}
+  \item{community}{Factor Longsword community id}
+  \item{community_label}{Character Community Label}
 }
 }
 \usage{
@@ -18,6 +21,7 @@ hema_countries
 }
 \description{
 This dataset contains a list of countries associated with HEMA activities.
+Note: the community were calculated using the generate community graph for Longsowrd with a travel threshold of 5 travels
 }
 \examples{
 data(hema_countries)

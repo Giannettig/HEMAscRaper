@@ -93,7 +93,7 @@ viz <- visualize_communities(graph, year = 2024)
 print(viz)
 ```
 
-![Hema Communities, Longsword 2024](Man/Rplot.png)
+![Hema Communities, Longsword 2024](man/img/Rplot.png)
 
 ### Example Parameters
 

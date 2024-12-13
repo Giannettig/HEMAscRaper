@@ -39,17 +39,6 @@ Applies community detection using the Louvain algorithm to group nodes into comm
 
 ## Result Presentation
 After generating the graph, you can inspect the filtered edges and nodes, as well as explore the detected communities:
-
-```r
-# View filtered edges
-filtered_graph %>% tidygraph::activate(edges) %>% tibble::as_tibble()
-
-# Extract communities and their details
-communities <- filtered_graph %>%
-  tidygraph::activate(nodes) %>%
-  tibble::as_tibble() %>%
-  dplyr::select(Id, Label, Population, Community, Community_Label)
-```
 }
 \examples{
 # Example 1: Generate a graph for 2024 with default thresholds and "Steel Longsword" weapon

@@ -6,17 +6,6 @@
 #' ## Result Presentation
 #' After generating the graph, you can inspect the filtered edges and nodes, as well as explore the detected communities:
 #' 
-#' ```r
-#' # View filtered edges
-#' filtered_graph %>% tidygraph::activate(edges) %>% tibble::as_tibble()
-#' 
-#' # Extract communities and their details
-#' communities <- filtered_graph %>%
-#'   tidygraph::activate(nodes) %>%
-#'   tibble::as_tibble() %>%
-#'   dplyr::select(Id, Label, Population, Community, Community_Label)
-#' ```
-#' 
 #' @param year A numeric value, vector of numeric values, or NULL. Filters the data to include only matches from the specified year(s). Default: NULL (all years).
 #' @param tournament_weapon A character vector or NULL. Filters the data to include only matches involving the specified tournament weapon(s). Default: NULL (all weapons).
 #' @param weight_threshold An integer. Minimum weight for edges (connections between nodes) to be included in the graph. Default: 5.

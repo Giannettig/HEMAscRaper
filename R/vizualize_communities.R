@@ -3,7 +3,6 @@
 #' Filters edges by weight and applies a color palette to distinguish communities. Provides an aesthetically styled plot.
 #'
 #' @param graph A `tbl_graph` object from the `tidygraph` package, representing nodes and edges of the graph.
-#' @param title the title present in the graph, if not specified, the timeframe of the community will be shown
 #' @param color_palette A character vector specifying custom colors for communities. If `NULL`, a default palette is used.
 #' @param layout_type A character string specifying the layout algorithm. Options include `"fr"` (default), `"kk"`, `"mds"`, and `"circle"`.
 #' @param weight_threshold_dotted A numeric value specifying the threshold for dotted line edges. Default: 5.

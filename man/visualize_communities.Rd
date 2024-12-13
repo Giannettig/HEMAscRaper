@@ -19,8 +19,6 @@ visualize_communities(
 \item{layout_type}{A character string specifying the layout algorithm. Options include `"fr"` (default), `"kk"`, `"mds"`, and `"circle"`.}
 
 \item{weight_threshold_dotted}{A numeric value specifying the threshold for dotted line edges. Default: 5.}
-
-\item{title}{the title present in the graph, if not specified, the timeframe of the community will be shown}
 }
 \value{
 A ggplot object representing the visualized graph.

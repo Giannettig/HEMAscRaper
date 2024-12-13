@@ -21,15 +21,20 @@ Imports:
     readr,
     colorspace,
     ggplot2,
+    tibble,
     ggraph, 
     ggforce,
     scales, 
-    tidygraph
+    tidygraph,
+    progress,
+    stats
 RoxygenNote: 7.3.2
 LazyDataCompression: xz
 Depends: 
     R (>= 4.4.0)
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
