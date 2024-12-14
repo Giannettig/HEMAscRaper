@@ -162,3 +162,14 @@
 #' data(hema_tournaments)
 #' head(hema_tournaments)
 "hema_tournaments"
+
+
+#' HEMA Schievement Test Data
+#'
+#' This dataset contains aggregated information about HEMA tournaments, including participant counts and match statistics.
+#'
+#'
+#' @examples
+#' data(test_data)
+#' head(test_data)
+"test_data"

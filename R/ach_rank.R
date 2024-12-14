@@ -16,7 +16,7 @@ ach_rank_longsword <- function(data) {
     "Silver",          2,        "Top 15% {tournament_weapon} Fighter {event_year}", "You're in the top 15% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_silver.png",
     "Bronze",          1,        "Top 30% {tournament_weapon} Fighter {event_year}", "You're in the top 30% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_bronze.png"
   )
-  
+
   # Calculate fighter stats and rankings per tournament weapon and year
   weapon_year_stats <- data %>%
     dplyr::group_by(event_year, tournament_weapon, fighter_id) %>%
@@ -39,7 +39,7 @@ ach_rank_longsword <- function(data) {
       percentile = rank / total_fighters * 100
     ) %>%
     dplyr::ungroup()
-  
+
   # Assign tiers based on percentiles
   weapon_year_tiers <- weapon_year_stats %>%
     dplyr::mutate(
@@ -52,7 +52,7 @@ ach_rank_longsword <- function(data) {
       )
     ) %>%
     dplyr::filter(!is.na(tier_id))
-  
+
   # Join tier details and format output
   achievements <- weapon_year_tiers %>%
     filter(!is.na(event_year) & !is.na(tournament_weapon) & !is.na(posterior_mean)) %>%
@@ -86,7 +86,7 @@ ach_rank_longsword <- function(data) {
       fighter_id = as.double(fighter_id),  # Ensure correct type
       tier_id = as.double(tier_id)        # Ensure correct type
     )
-  
+
   # Handle case where no achievements exist
   if (nrow(achievements) == 0) {
     return(data.frame(
@@ -96,6 +96,7 @@ ach_rank_longsword <- function(data) {
       achievement_icon = character(0), stringsAsFactors = FALSE
     ))
   }
-  
+
   return(achievements)
 }
+

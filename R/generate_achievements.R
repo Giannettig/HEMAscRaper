@@ -1,9 +1,9 @@
 #' Generate Achievements
 #'
 #' @description
-#' External function to generate achievements for HEMA ratings. This function 
-#' retrieves data from the specified path or uses package data as a fallback. 
-#' It computes achievements by invoking all functions prefixed with `ach_` in 
+#' External function to generate achievements for HEMA ratings. This function
+#' retrieves data from the specified path or uses package data as a fallback.
+#' It computes achievements by invoking all functions prefixed with `ach_` in
 #' the namespace of the `HEMAscRaper` package.
 #'
 #' @param path Character. Path to the folder containing HEMA data files. Defaults to `./hema_ratings`.
@@ -31,39 +31,39 @@
 #' @export
 generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
   start_time <- Sys.time()
-  
+
   # Check if the folder exists
   if (!dir.exists(path)) {
     message("The folder with data '", path, "' does not exist. Consider running refresh_hema_data() to refresh. Package data will be used.")
   }
-  
+
   # Import input data
   hema_match_results <- if (file.exists(file.path(path, "hema_match_results.csv"))) {
     readr::read_csv(file.path(path, "hema_match_results.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_match_results
   }
-  
+
   hema_clubs <- if (file.exists(file.path(path, "hema_clubs.csv"))) {
     readr::read_csv(file.path(path, "hema_clubs.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_clubs
   }
-  
+
   hema_events <- if (file.exists(file.path(path, "hema_events.csv"))) {
     readr::read_csv(file.path(path, "hema_events.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_events
   }
-  
+
   hema_fighters <- if (file.exists(file.path(path, "hema_fighters.csv"))) {
     readr::read_csv(file.path(path, "hema_fighters.csv"),show_col_types = FALSE)
   } else {
     HEMAscRaper::hema_fighters
   }
-  
+
   hema_countries <- HEMAscRaper::hema_countries
-  
+
   # Data preparation
   data <- hema_match_results %>%
     dplyr::select(-club_id) %>%
@@ -79,11 +79,11 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
                   club_sub_region = sub_region,
                   club_community = community_label) %>%
     dplyr::filter(fighter_id != 0)  # Filter out anonymous fighter data
-  
+
   # Retrieve all `ach_` prefixed functions from HEMAscRaper namespace
   achievement_list <- grep("^ach_", ls("package:HEMAscRaper"), value = TRUE)
   achievement_functions <- stats::setNames(lapply(achievement_list, get, envir = asNamespace("HEMAscRaper")), achievement_list)
-  
+
   # Progress bar setup
   pb <- progress::progress_bar$new(
     format = "[:bar] :current/:total (:percent) - :elapsed - Processing: :function",
@@ -91,7 +91,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
     clear = FALSE,
     width = 80
   )
-  
+
   # Compute achievements with error and warning handling
   achievements <- purrr::imap_dfr(achievement_functions, function(fn, name) {
     pb$tick(tokens = list("function" = name))
@@ -109,7 +109,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
       }
     )
   })
-  
+
   # End computation and print time
   end_time <- Sys.time()
   message("Achievement generation completed in ", round(difftime(end_time, start_time, units = "secs"), 2), " seconds.")
@@ -118,3 +118,4 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
     message(paste0("Achievements saved in the ", path, " folder."))}
   achievements
 }
+#
