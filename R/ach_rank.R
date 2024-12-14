@@ -11,10 +11,10 @@ ach_rank_longsword <- function(data) {
   # Define achievement tiers
   tiers <- dplyr::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name_template, ~achievement_description_template, ~achievement_icon,
-    "Epic",            4,        "Top 1% {tournament_weapon} Fighter {event_year}", "You're in the top 1% of {tournament_weapon} fighters in {event_year}! You won {posterior_mean}% of your fights!", "rank_epic.png",
-    "Gold",            3,        "Top 5% {tournament_weapon} Fighter {event_year}", "You're in the top 5% of {tournament_weapon} fighters in {event_year}! You won {posterior_mean}% of your fights!", "rank_gold.png",
-    "Silver",          2,        "Top 15% {tournament_weapon} Fighter {event_year}", "You're in the top 15% of {tournament_weapon} fighters in {event_year}! You won {posterior_mean}% of your fights!", "rank_silver.png",
-    "Bronze",          1,        "Top 30% {tournament_weapon} Fighter {event_year}", "You're in the top 30% of {tournament_weapon} fighters in {event_year}! You won {posterior_mean}% of your fights!", "rank_bronze.png"
+    "Epic",            4,        "Top 1% {tournament_weapon} Fighter {event_year}", "You're in the top 1% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_epic.png",
+    "Gold",            3,        "Top 5% {tournament_weapon} Fighter {event_year}", "You're in the top 5% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_gold.png",
+    "Silver",          2,        "Top 15% {tournament_weapon} Fighter {event_year}", "You're in the top 15% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_silver.png",
+    "Bronze",          1,        "Top 30% {tournament_weapon} Fighter {event_year}", "You're in the top 30% of {tournament_weapon} fighters! In {event_year} you won {posterior_mean}% of your fights!", "rank_bronze.png"
   )
   
   # Calculate fighter stats and rankings per tournament weapon and year
@@ -55,34 +55,19 @@ ach_rank_longsword <- function(data) {
   
   # Join tier details and format output
   achievements <- weapon_year_tiers %>%
+    filter(!is.na(event_year) & !is.na(tournament_weapon) & !is.na(posterior_mean)) %>%
     dplyr::left_join(tiers, by = "tier_id") %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      achievement_name = ifelse(
-        is.na(achievement_name_template),
-        NA,
-        stringr::str_replace_all(
-          achievement_name_template,
-          c(
-            "\\{tournament_weapon\\}" = ifelse(is.na(tournament_weapon), "unknown weapon", tournament_weapon),
-            "\\{event_year\\}" = ifelse(is.na(event_year), "unknown year", as.character(event_year))
-          )
-        )
-      ),
-      achievement_description = ifelse(
-        is.na(achievement_description_template),
-        NA,
-        stringr::str_replace_all(
-          achievement_description_template,
-          c(
-            "\\{posterior_mean\\}" = ifelse(
-              is.na(posterior_mean),
-              "N/A",
-              sprintf("%.2f", posterior_mean * 100)
-            )
-          )
-        )
-      ),
+      achievement_name = achievement_name_template %>%
+        stringr::str_replace_all("\\{tournament_weapon\\}" , tournament_weapon)%>%
+        stringr::str_replace_all("\\{event_year\\}" , as.character(event_year)),
+
+      achievement_description = achievement_description_template %>%
+        stringr::str_replace_all( "\\{tournament_weapon\\}", tournament_weapon) %>%
+        stringr::str_replace_all("\\{event_year\\}", as.character(event_year)) %>%
+        stringr::str_replace_all( "\\{posterior_mean\\}" , sprintf("%.2f", posterior_mean * 100))
+      ,
       achieved = !is.na(achievement_name)
     ) %>%
     dplyr::ungroup() %>%

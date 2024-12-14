@@ -54,7 +54,7 @@ ach_yearly_finals_tiers <- function(data) {
   }
   
   # Define regex pattern for qualifying stages
-  pattern <- "(?i)(gold|final(?!.*(eight|octo|quarter|semi|1/8|1/16|1/4|top|pool)))"
+  pattern <- "(?i)(gold|final(?!.*(eight|octo|quarter|semi|semi-finals|1/8|1/16|1/4|top|pool)))"
   
   # Normalize data
   data_clean <- data %>%

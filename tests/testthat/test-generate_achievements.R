@@ -49,6 +49,13 @@ test_that("all achievement functions generate correct output data", {
     # Check the output structure and types
     test_that(paste("Testing function", func_name), {
       check_datatype(result)
+      
+      # Check that no required columns contain NA values
+      required_columns <- c("achievement_tier", "achievement_name", "achievement_description", "achievement_icon")
+      for (col in required_columns) {
+        expect_false(any(is.na(result[[col]])), 
+                     info = paste0("Column '", col, "' contains NA values"))
+      }
     })
   }
 })
