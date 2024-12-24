@@ -1,8 +1,6 @@
 HEMAscRaper
 ================
 
-# HEMAscRaper
-
 `HEMAscRaper` is an R package that provides tools to work with
 Historical European Martial Arts (HEMA) data. It includes preloaded
 datasets, functions to refresh data from the HEMA Ratings website, and
@@ -110,8 +108,8 @@ print(viz)
 ```
 
 <figure>
-<img src="man/img/Rplot.png" alt="Hema Communities, Longsword 2024" />
-<figcaption aria-hidden="true">Hema Communities, Longsword
+<img src="man/img/Rplot.png" alt="HEMA Communities, Longsword 2024" />
+<figcaption aria-hidden="true">HEMA Communities, Longsword
 2024</figcaption>
 </figure>
 

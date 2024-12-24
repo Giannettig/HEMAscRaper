@@ -2,7 +2,7 @@
 % Please edit documentation in R/vizualize_communities.R
 \name{visualize_communities}
 \alias{visualize_communities}
-\title{Visualize Hema Communities}
+\title{Visualize HEMA Communities}
 \usage{
 visualize_communities(
   graph,

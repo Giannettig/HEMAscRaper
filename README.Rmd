@@ -4,8 +4,6 @@ title: "HEMAscRaper"
 output: github_document
 ---
 
-# HEMAscRaper
-
 `HEMAscRaper` is an R package that provides tools to work with Historical European Martial Arts (HEMA) data. It includes preloaded datasets, functions to refresh data from the HEMA Ratings website, and utilities to calculate and visualize communities in the HEMA ecosystem.
 
 ## Installation
@@ -94,7 +92,7 @@ viz <- visualize_communities(graph, year = 2024)
 print(viz)
 ```
 
-![Hema Communities, Longsword 2024](man/img/Rplot.png)
+![HEMA Communities, Longsword 2024](man/img/Rplot.png)
 
 ### Example Parameters
 

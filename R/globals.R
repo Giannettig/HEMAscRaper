@@ -81,7 +81,7 @@ utils::globalVariables(
     "max_streak", "max_wins", "percentile", "population", "posterior_mean", "result", 
     "stage_norm", "tier_id", "total_countries", "total_events", "total_fighters", 
     "total_fighters_in_year", "total_matches", "total_wins", "tournament_count", 
-    "tournaments_attended", "visited_regions", "weapon_count", "win_rate", "wins"
+    "tournaments_attended", "visited_regions", "weapon_count", "win_rate", "wins","gold_medal_matches"
   )
 )
 

@@ -1,11 +1,11 @@
 Package: HEMAscRaper
 Type: Package
 Title: Tools for Downloading and Analyzing HEMA Ratings Data
-Version: 0.1.0.9000
+Version: 1.0.0
 Author: Giuliano Giannetti
 Maintainer: Giuliano Giannetti <giuliano@seznam.cz>
 Description: Provides tools to download data from the HEMA Ratings website, including information on fighters, clubs, events, and tournament results. Includes functionality for calculating HEMA communities or "islands" using network graph analysis.
-License: GPL (>= 3)
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -33,8 +33,6 @@ LazyDataCompression: xz
 Depends: 
     R (>= 4.4.0)
 Suggests: 
-    knitr,
     rmarkdown,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
 Config/testthat/edition: 3

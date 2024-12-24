@@ -27,7 +27,7 @@
 #' HEMA Countries Dataset
 #'
 #' This dataset contains a list of countries associated with HEMA activities.
-#' Note: the community were calculated using the generate community graph for Longsowrd with a travel threshold of 5 travels
+#' Note: the community were calculated using the generate community graph for Longsword with a travel threshold of 5 travels
 #'
 #' @format A data frame with the following columns:
 #' \describe{

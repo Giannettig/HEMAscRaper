@@ -1,4 +1,4 @@
-#' @title Visualize Hema Communities
+#' @title Visualize HEMA Communities
 #' @description Generates a visual representation of a graph object, applying community detection and customizable layouts.
 #' Filters edges by weight and applies a color palette to distinguish communities. Provides an aesthetically styled plot.
 #'

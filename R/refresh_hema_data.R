@@ -1,7 +1,7 @@
 #' Refresh HEMA Ratings Data
 #'
 #' Downloads and processes HEMA ratings data, performing incremental or full updates, and saves the results as CSV files.
-#' Infividual fencer achievements are calculated and tored in path. 
+#' Individual fencer achievements are calculated and stored in path. 
 #'
 #' @param incremental Logical. If `TRUE`, performs an incremental update of the fights dataset. If `FALSE`, downloads the entire fights dataset. Defaults to `TRUE`.
 #' @param path Character. The directory where the processed CSV files will be saved. Defaults to `"./hema_ratings"`.
