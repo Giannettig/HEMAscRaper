@@ -78,7 +78,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv=FALSE) {
     dplyr::rename(club_region = region,
                   club_sub_region = sub_region,
                   club_community = community_label) %>%
-    dplyr::filter(fighter_id != 0)  # Filter out anonymous fighter data
+    dplyr::filter(fighter_id != 0 & !is.na(fighter_id) & !is.na(event_id) & !is.na(event_year))  # Filter out anonymous fighter data
 
   # Retrieve all `ach_` prefixed functions from HEMAscRaper namespace
   achievement_list <- grep("^ach_", ls("package:HEMAscRaper"), value = TRUE)

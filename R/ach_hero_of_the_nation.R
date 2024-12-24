@@ -33,6 +33,7 @@ ach_hero_of_the_nation <- function(data) {
   
   # Calculate wins by fighter, year, and country
   wins_by_country <- data %>%
+    filter(!is.na(event_year) & !is.na(club_country))%>%
     dplyr::filter(result == "WIN") %>%
     dplyr::group_by(event_year, club_country, fighter_id) %>%
     dplyr::summarise(total_wins = n(), .groups = "drop")
@@ -49,6 +50,7 @@ ach_hero_of_the_nation <- function(data) {
   
   # Total fighters per year for percentile calculation
   total_fighters <- data %>%
+    filter(!is.na(event_year))%>%
     dplyr::group_by(event_year) %>%
     dplyr::summarise(total_fighters_in_year = n_distinct(fighter_id), .groups = "drop")
   

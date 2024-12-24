@@ -25,9 +25,9 @@ A data frame containing all achievements, with columns:
 }
 }
 \description{
-External function to generate achievements for HEMA ratings. This function 
-retrieves data from the specified path or uses package data as a fallback. 
-It computes achievements by invoking all functions prefixed with `ach_` in 
+External function to generate achievements for HEMA ratings. This function
+retrieves data from the specified path or uses package data as a fallback.
+It computes achievements by invoking all functions prefixed with `ach_` in
 the namespace of the `HEMAscRaper` package.
 }
 \examples{

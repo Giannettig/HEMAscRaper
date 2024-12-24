@@ -37,7 +37,7 @@ ach_king_midas <- function(data) {
   
   # Filter data for gold medal matches
   pattern <- "(?i)(gold|final(?!.*(eight|octo|quarter|semi|1/8|1/16|1/4|top|pool)))"
-  gold_medal_matches <- data %>%
+  gold_medalx_matches <- data %>%
     dplyr::mutate(stage_norm = tolower(gsub("[[:punct:]]", " ", stage))) %>%
     dplyr::filter(stringr::str_detect(stage_norm, pattern), result == "WIN")
   
