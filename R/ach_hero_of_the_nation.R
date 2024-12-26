@@ -28,7 +28,7 @@ ach_hero_of_the_nation <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name,              ~achievement_description,                                                           ~achievement_icon,
-    "Unique",           1,        "Every Nation Needs a Hero",   "You won the most fights ({total_wins} wins) in your country ({club_country}) in {event_year}!", "hero_nation_unique.png"
+    "Unique",           1,        "Every Nation Needs a Hero {event_year}",   "You won the most fights ({total_wins} wins) in your country ({club_country}) in {event_year}!", "hero_nation_unique.png"
   )
   
   # Calculate wins by fighter, year, and country
@@ -59,7 +59,7 @@ ach_hero_of_the_nation <- function(data) {
     dplyr::left_join(tiers, by = "tier_id") %>%
     dplyr::left_join(total_fighters, by = "event_year") %>%
     dplyr::mutate(
-      achievement_name = stringr::str_replace_all(achievement_name, "\\{club_country\\}", club_country),
+      achievement_name = (stringr::str_replace_all(achievement_name, "\\{club_country\\}", club_country))%>%stringr::str_replace_all("\\{event_year\\}", as.character(event_year)),
       achievement_description = stringr::str_replace_all(
         achievement_description,
         "\\{club_country\\}",

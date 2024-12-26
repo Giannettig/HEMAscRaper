@@ -31,10 +31,10 @@ ach_pilgrim <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name, ~achievement_description,                                         ~achievement_icon,
-    "Bronze",           1,        "The Pilgrim",     "You fought in tournaments in 2 countries in {event_year}!",      "pilgrim_bronze.png",
-    "Silver",           2,        "The Pilgrim",     "You fought in tournaments in 5 countries in {event_year}!",      "pilgrim_silver.png",
-    "Gold",             3,        "The Pilgrim",     "You fought in tournaments in 15 countries in {event_year}!",     "pilgrim_gold.png",
-    "Epic",             4,        "The Pilgrim",     "You fought in the most countries in {event_year}!",              "pilgrim_epic.png"
+    "Bronze",           1,        "The Pilgrim {event_year}",     "You fought in tournaments in 2 countries in {event_year}!",      "pilgrim_bronze.png",
+    "Silver",           2,        "The Pilgrim {event_year}",     "You fought in tournaments in 5 countries in {event_year}!",      "pilgrim_silver.png",
+    "Gold",             3,        "The Pilgrim {event_year}",     "You fought in tournaments in 15 countries in {event_year}!",     "pilgrim_gold.png",
+    "Epic",             4,        "The Pilgrim {event_year}",     "You fought in the most countries in {event_year}!",              "pilgrim_epic.png"
   )
   
   # Calculate the number of countries each fighter participated in per year

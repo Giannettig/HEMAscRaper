@@ -104,3 +104,52 @@ test_that("generate_achievements handles warnings and errors gracefully", {
 
   expect_s3_class(achievements, "data.frame")
 })
+
+
+test_that("achievement names are consistent with descriptions for each fighter", {
+  
+  # Load test data
+  test_data <- HEMAscRaper::test_data
+  
+  # Retrieve all `ach_` prefixed functions from the HEMAscRaper namespace
+  achievement_list <- grep("^ach_", ls("package:HEMAscRaper"), value = TRUE)
+  achievement_functions <- stats::setNames(
+    map(achievement_list, ~ get(.x, envir = asNamespace("HEMAscRaper"))),
+    achievement_list
+  )
+  
+  # Function to check name-description consistency for each fighter
+  check_fighter_name_description_consistency <- function(achievements) {
+    # Group by fighter_id and check name/description consistency
+    inconsistencies <- achievements %>%
+      group_by(fighter_id) %>%
+      summarize(
+        distinct_names = n_distinct(achievement_name),
+        distinct_descriptions = n_distinct(achievement_description),
+        .groups = "drop"
+      ) %>%
+      filter(distinct_names < distinct_descriptions)
+    
+    # Expect no inconsistencies
+    expect_true(
+      nrow(inconsistencies) == 0,
+      info = paste0(
+        "Inconsistencies found for fighters:\n",
+        paste(
+          paste0(
+            "- Fighter ID: ", inconsistencies$fighter_id,
+            " (Names: ", inconsistencies$distinct_names,
+            ", Descriptions: ", inconsistencies$distinct_descriptions, ")"
+          ),
+          collapse = "\n"
+        )
+      )
+    )
+  }
+  
+  # Apply each function to the test data and combine results
+  all_results <- map_dfr(achievement_functions, ~ .x(test_data), .id = "function_name")
+  
+  # Run consistency check
+  check_fighter_name_description_consistency(all_results)
+})

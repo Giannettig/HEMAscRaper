@@ -9,7 +9,7 @@ ach_consistency_is_key <- function(data) {
   # Define achievement tier (unique for this achievement)
   tiers <- dplyr::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name_template, ~achievement_description_template, ~achievement_icon,
-    "Unique",          1,        "Consistency is Key {event_year}", "You participated in {max_events} events in {event_year}!", "consistency_key_unique.png"
+    "Unique",          1,        "Consistency is Key event_year", "You participated in {max_events} events in event_year!", "consistency_key_unique.png"
   )
   
   # Calculate the number of events participated in by each fighter per year
@@ -43,11 +43,13 @@ ach_consistency_is_key <- function(data) {
     dplyr::mutate(
       achievement_name = stringr::str_replace_all(
         achievement_name_template,
-        c("\\{event_year\\}" = as.character(event_year))
+        c("event_year" = as.character(event_year))
       ),
-      achievement_description = stringr::str_replace_all(
+      achievement_description = (stringr::str_replace_all(
         achievement_description_template,
-        c("\\{max_events\\}" = as.character(max_events))
+        c("\\{max_events\\}" = as.character(max_events))))%>%stringr::str_replace_all(
+          c("event_year" = as.character(event_year)
+        )
       )
     ) %>%
     dplyr::ungroup() %>%

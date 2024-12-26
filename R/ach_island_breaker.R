@@ -31,10 +31,10 @@ ach_island_breaker <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name,         ~achievement_description,                                              ~achievement_icon,
-    "Bronze",           1,        "Island Breaker",         "You fought in 2 different HEMA scenes in {event_year}!",              "island_breaker_bronze.png",
-    "Silver",           2,        "Island Breaker",         "You fought in 3 different HEMA scenes in {event_year}!",              "island_breaker_silver.png",
-    "Gold",             3,        "Island Breaker",         "You fought in 4 different HEMA scenes in {event_year}!",              "island_breaker_gold.png",
-    "Epic",             4,        "Island Breaker",         "You fought in 5 or more different HEMA scenes in {event_year}!",      "island_breaker_epic.png"
+    "Bronze",           1,        "Island Breaker {event_year}",         "You fought in 2 different HEMA scenes in {event_year}!",              "island_breaker_bronze.png",
+    "Silver",           2,        "Island Breaker {event_year}",         "You fought in 3 different HEMA scenes in {event_year}!",              "island_breaker_silver.png",
+    "Gold",             3,        "Island Breaker {event_year}",         "You fought in 4 different HEMA scenes in {event_year}!",              "island_breaker_gold.png",
+    "Epic",             4,        "Island Breaker {event_year}",         "You fought in 5 or more different HEMA scenes in {event_year}!",      "island_breaker_epic.png"
   )
   
   # Calculate the number of scenes each fighter participated in per year

@@ -32,7 +32,7 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
   if (!incremental) {
     hema_fights <- get_fights()
   } else if (file.exists(file.path(path, "hema_fights.csv"))) {
-    hema_fights <- readr::read_csv(file.path(path, "hema_fights.csv"))
+    hema_fights <- readr::read_csv(file.path(path, "hema_fights.csv", show_col_types = FALSE))
   } else {
     hema_fights<-hema_fights
   }

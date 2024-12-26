@@ -57,8 +57,8 @@ ach_animal_lover <- function(data) {
   # Count distinct animal tournaments per fighter per year
   achievement_data <- data %>%
     dplyr::semi_join(animal_related_events, by = "event_id") %>%
-    dplyr::group_by(fighter_id, event_year) %>%
-    dplyr::summarise(animal_tournaments = n_distinct(tournament_id), .groups = "drop") %>%
+    dplyr::group_by(fighter_id) %>%
+    dplyr::summarise(animal_tournaments = n_distinct(event_brand), .groups = "drop") %>%
     dplyr::mutate(
       tier_id = dplyr::case_when(
         animal_tournaments >= 8 ~ 4,
@@ -70,9 +70,7 @@ ach_animal_lover <- function(data) {
       achieved = !is.na(tier_id)
     ) %>%
     dplyr::filter(achieved) %>%
-    dplyr::group_by(event_year) %>%
     dplyr::mutate(percentile = n() / base::nrow(data %>% dplyr::distinct(fighter_id))) %>%
-    dplyr::ungroup() %>%
     dplyr::left_join(tiers, by = "tier_id") %>%
     dplyr::mutate(
       achievement_description = stringr::str_replace_all(

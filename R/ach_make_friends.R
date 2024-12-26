@@ -28,7 +28,7 @@ ach_make_friends_weapon <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name,               ~achievement_description,                                                    ~achievement_icon,
-    "Unique",           1,        "It Is Good to Make Friends!",   "You faced the most unique opponents ({unique_opponents}) in {tournament_weapon} in {event_year}!", "friends_unique_weapon.png"
+    "Unique",           1,        "It Is Good to Make Friends! {tournament_weapon} - {event_year}",   "You faced the most unique opponents ({unique_opponents}) in {tournament_weapon} in {event_year}!", "friends_unique_weapon.png"
   )
   
   # Calculate unique opponents per fighter, weapon, and year
@@ -53,7 +53,7 @@ ach_make_friends_weapon <- function(data) {
   achievements <- top_fighters %>%
     dplyr::left_join(tiers, by = "tier_id") %>%
     dplyr::mutate(
-      achievement_name = stringr::str_replace_all(achievement_name, "\\{event_year\\}", as.character(event_year)),
+      achievement_name = stringr::str_replace_all(achievement_name, "\\{event_year\\}", as.character(event_year))%>%stringr::str_replace_all("\\{tournament_weapon\\}", tournament_weapon),
       achievement_description = stringr::str_replace_all(
         achievement_description,
         "\\{unique_opponents\\}",
