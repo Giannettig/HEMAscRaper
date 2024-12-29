@@ -6,6 +6,7 @@
 #' @param color_palette A character vector specifying custom colors for communities. If `NULL`, a default palette is used.
 #' @param layout_type A character string specifying the layout algorithm. Options include `"fr"` (default), `"kk"`, `"mds"`, and `"circle"`.
 #' @param weight_threshold_dotted A numeric value specifying the threshold for dotted line edges. Default: 5.
+#' @param show_labels boolean - turn off the grapgh description.
 #'
 #' @return A ggplot object representing the visualized graph.
 #' @examples
@@ -36,7 +37,8 @@ visualize_communities <- function(
     graph,
     color_palette = NULL,
     layout_type = "fr",
-    weight_threshold_dotted = 5
+    weight_threshold_dotted = 5,
+    show_labels=TRUE
 ) {
   # Validate layout_type
   valid_layouts <- c("fr", "kk", "mds", "circle")
@@ -86,7 +88,7 @@ visualize_communities <- function(
     )
   
   # Generate the graph visualization
-  ggraph::ggraph(graph_layout) +
+  g<-ggraph::ggraph(graph_layout) +
     ggraph::geom_edge_link(
       ggplot2::aes(width = Weight, linetype = Line_Type, alpha = Weight),
       color = "#666666"
@@ -108,7 +110,22 @@ visualize_communities <- function(
     ggraph::geom_node_text(
       ggplot2::aes(x = x, y = y, label = Label, color = as.factor(Community)),
       repel = TRUE, nudge_y = 0.2, size = 3.5, max.overlaps = 30
-    ) +
+    )  +
+    ggplot2::scale_size_continuous(range = c(5, 20)) +
+    ggplot2::scale_fill_manual(values = color_palette[-1]) +
+    ggplot2::scale_color_manual(values = colorspace::lighten(color_palette[-1], 0.7)) +
+    dark_theme +
+    ggplot2::theme(
+      plot.margin = ggplot2::margin(20, 20, 20, 20),
+      legend.position = "bottom right",
+      legend.title = ggplot2::element_blank(),
+      legend.text = ggplot2::element_blank(),
+      text = ggplot2::element_text(family = "Avenir Next")
+    )
+  
+  # Add annotations conditionally based on `show_labels`
+  if (show_labels) {
+    g <- g +
     # Title
     ggplot2::annotate(
       "text",
@@ -125,22 +142,15 @@ visualize_communities <- function(
         "Year: ", graph$year, "\n",
         "Weapon: ", graph$tournament_weapon, "\n",
         "Min Travels: ", graph$weight_threshold, "\n",
-        "Min Community Size: ", graph$population_threshold
+        "Min Country Fencers: ", graph$population_threshold
       ),
       x = Inf, y = Inf,
       hjust = 1, vjust = 1.8,  # Adjust `vjust` to position the table below the title
       color = "white",
       size = 4
-    ) +
-    ggplot2::scale_size_continuous(range = c(5, 20)) +
-    ggplot2::scale_fill_manual(values = color_palette[-1]) +
-    ggplot2::scale_color_manual(values = colorspace::lighten(color_palette[-1], 0.7)) +
-    dark_theme +
-    ggplot2::theme(
-      plot.margin = ggplot2::margin(20, 20, 20, 20),
-      legend.position = "bottom right",
-      legend.title = ggplot2::element_blank(),
-      legend.text = ggplot2::element_blank(),
-      text = ggplot2::element_text(family = "Avenir Next")
     )
+    
+  }
+  
+  print(g)
 }

@@ -5,7 +5,7 @@
 \alias{test_data}
 \title{HEMA Schievement Test Data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 10000 rows and 43 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 10000 rows and 38 columns.
 }
 \usage{
 test_data

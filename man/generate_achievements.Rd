@@ -7,16 +7,16 @@
 generate_achievements(path = "./hema_ratings", export_csv = FALSE)
 }
 \arguments{
-\item{path}{Character. Path to the folder containing HEMA data files. Defaults to `./hema_ratings`.}
+\item{path}{Character. Path to the folder containing HEMA data files. Defaults to \code{"./hema_ratings"}.}
 
-\item{export_csv}{Bool. Will export the achievements list as CSV to Path.}
+\item{export_csv}{Logical. If \code{TRUE}, exports the achievements list as a CSV to \code{path}.}
 }
 \value{
 A data frame containing all achievements, with columns:
 \describe{
   \item{fighter_id}{ID of the fighter.}
   \item{tier_id}{Numeric tier ID (1-4).}
-  \item{achieved}{Logical, TRUE if achieved.}
+  \item{achieved}{Logical, \code{TRUE} if achieved.}
   \item{percentile}{Proportion of fighters who achieved this tier.}
   \item{achievement_tier}{Character. Tier name ("Bronze", "Silver", etc.).}
   \item{achievement_name}{Character. Name of the achievement.}
@@ -31,5 +31,8 @@ It computes achievements by invoking all functions prefixed with `ach_` in
 the namespace of the `HEMAscRaper` package.
 }
 \examples{
+\dontrun{
 generate_achievements("./hema_ratings")
+}
+
 }

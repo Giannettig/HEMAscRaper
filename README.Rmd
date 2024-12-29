@@ -88,7 +88,7 @@ graph %>%
 ### Visualizing Communities
 
 ```r
-viz <- visualize_communities(graph, year = 2024)
+viz <- visualize_communities(graph)
 print(viz)
 ```
 

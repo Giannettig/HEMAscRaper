@@ -7,16 +7,18 @@
 refresh_hema_data(incremental = TRUE, path = "./hema_ratings")
 }
 \arguments{
-\item{incremental}{Logical. If `TRUE`, performs an incremental update of the fights dataset. If `FALSE`, downloads the entire fights dataset. Defaults to `TRUE`.}
+\item{incremental}{Logical. If `TRUE`, performs an incremental update of the fights dataset.
+If `FALSE`, downloads the entire fights dataset. Defaults to `TRUE`.}
 
-\item{path}{Character. The directory where the processed CSV files will be saved. Defaults to `"./hema_ratings"`.}
+\item{path}{Character. The directory where the processed CSV files will be saved.
+Defaults to `"./hema_ratings"`.}
 }
 \value{
 None. This function saves the processed data to the specified path as CSV files.
 }
 \description{
 Downloads and processes HEMA ratings data, performing incremental or full updates, and saves the results as CSV files.
-Individual fencer achievements are calculated and stored in path.
+Individual fencer achievements are calculated and stored in \code{path}.
 }
 \examples{
 \dontrun{

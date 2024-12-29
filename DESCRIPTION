@@ -27,12 +27,14 @@ Imports:
     scales, 
     tidygraph,
     progress,
-    stats
+    stats,
+    chromote,
+    tidyr,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.3.2
 LazyDataCompression: xz
 Depends: 
     R (>= 4.4.0)
 Suggests: 
-    rmarkdown,
-    testthat (>= 3.0.0)
+    rmarkdown
 Config/testthat/edition: 3

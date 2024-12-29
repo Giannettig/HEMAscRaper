@@ -123,6 +123,7 @@
 #'   \item{debut_fight}{Logical. Indicates if this is the fighter's debut match.}
 #'   \item{event_id}{Integer. Identifier for the associated event.}
 #'   \item{event_name}{Character. Name of the event.}
+#'   \item{is_final}{Character. True if the stage is a final or gold match}
 #'   \item{fighter_id}{Integer. Identifier for the fighter.}
 #'   \item{fighter_name}{Character. Name of the fighter.}
 #'   \item{match_id}{Integer. Unique identifier for each match.}
@@ -173,3 +174,31 @@
 #' data(test_data)
 #' head(test_data)
 "test_data"
+
+#' @title HEMA Fighter Rankings Dataset
+#' @description A dataset containing rankings for historical European martial arts (HEMA) fighters, including their weighted ratings, club affiliations, and metadata such as competition categories and dates.
+#' @format A tibble with the following columns:
+#' \describe{
+#'   \item{rank}{An integer representing the fighter's rank in the competition.}
+#'   \item{fighter_id}{A numeric identifier uniquely assigned to each fighter.}
+#'   \item{fighter_name}{A character string indicating the name of the fighter.}
+#'   \item{category}{A character string describing the competition category (e.g., "Longsword (Mixed & Men's, Steel)").}
+#'   \item{month}{A character string representing the ranking period, such as "December 2024".}
+#'   \item{weighted_rating}{A numeric value representing the weighted rating of the fighter based on their performance.}
+#'   \item{club}{A character string indicating the club or academy the fighter represents.}
+#'   \item{month_date}{A date object representing the exact date of the ranking period (e.g., "2024-12-28").}
+#' }
+#' @details This dataset provides detailed rankings of fighters participating in HEMA competitions. It includes their rank, weighted rating, associated club, and metadata about the competition's category and date. This dataset is particularly useful for analyzing fighter performance and tracking historical rankings across different periods.
+#' @examples
+#' \dontrun{
+#'   # View the first few rows of the dataset
+#'   head(hema_rankings)
+#'
+#'   # Filter fighters ranked in the top 5
+#'   dplyr::filter(hema_rankings, rank <= 5)
+#'
+#'   # Summarize the average weighted rating by category
+#'   dplyr::group_by(hema_rankings, category) %>%
+#'     dplyr::summarize(avg_rating = mean(weighted_rating, na.rm = TRUE))
+#' }
+"hema_rankings"

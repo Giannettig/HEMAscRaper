@@ -8,7 +8,8 @@ visualize_communities(
   graph,
   color_palette = NULL,
   layout_type = "fr",
-  weight_threshold_dotted = 5
+  weight_threshold_dotted = 5,
+  show_labels = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ visualize_communities(
 \item{layout_type}{A character string specifying the layout algorithm. Options include `"fr"` (default), `"kk"`, `"mds"`, and `"circle"`.}
 
 \item{weight_threshold_dotted}{A numeric value specifying the threshold for dotted line edges. Default: 5.}
+
+\item{show_labels}{boolean - turn off the grapgh description.}
 }
 \value{
 A ggplot object representing the visualized graph.

@@ -11,6 +11,7 @@ A data frame with the following columns:
   \item{debut_fight}{Logical. Indicates if this is the fighter's debut match.}
   \item{event_id}{Integer. Identifier for the associated event.}
   \item{event_name}{Character. Name of the event.}
+  \item{is_final}{Character. True if the stage is a final or gold match}
   \item{fighter_id}{Integer. Identifier for the fighter.}
   \item{fighter_name}{Character. Name of the fighter.}
   \item{match_id}{Integer. Unique identifier for each match.}

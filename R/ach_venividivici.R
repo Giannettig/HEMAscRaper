@@ -42,29 +42,19 @@ ach_veni_vidi_vici <- function(data) {
     "Unique",           1,        "Veni Vidi Vici", "You won a final match in your very first tournament.", "veni_vidi_vici.png"
   )
   
-  # Normalize stage names
-  normalize_stage <- function(x) {
-    stringr::str_squish(gsub("[[:punct:]]", " ", tolower(x)))
-  }
-  
-  # Pattern to identify top-level final/gold matches
-  pattern <- "(gold|\\bfinal\\b(?!.*\\b(eight|octo|sixteen|quarter|semi|1/8|1/16|1/4|top|pool)\\b))"
-  
-  # Clean data by normalizing stages
-  data_clean <- data %>%
-    dplyr::mutate(stage_norm = normalize_stage(stage))
+ 
   # Identify final winners in their very first tournament
-  final_winners_first_tournament <- data_clean %>%
+  final_winners <- data %>%
     # Step 1: Identify fighters with a WIN result in a top-level final
     dplyr::filter(
-      stringr::str_detect(stage_norm, pattern), # Matches "final" stage based on your pattern
+      .data$is_final==TRUE, # Matches "final" stage based on your pattern
       result == "WIN"                           # Only consider winners
     ) %>%
     # Step 2: Find the earliest tournament date for each fighter
     dplyr::group_by(fighter_id) %>%
     dplyr::mutate(first_tournament_date = min(event_date)) %>%
     # Step 3: Filter where the event_date matches the fighter's earliest tournament date
-    dplyr::filter(event_date == first_tournament_date) %>%
+    dplyr::filter(event_date == .data$first_tournament_date) %>%
     # Step 4: Select only the earliest win if there are ties on the event_date
     dplyr::slice_min(order_by = event_date, with_ties = FALSE) %>%
     dplyr::ungroup()
