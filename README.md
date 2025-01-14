@@ -110,7 +110,7 @@ hema_match_results <- if (file.exists(file.path(path, "hema_match_results.csv"))
 graph <- generate_communities_graph(
   year = 2024,
   tournament_weapon = "Steel Longsword",
-  weight_threshold = 6,
+  weight_threshold = 10,
   population_threshold = 15,
   hema_clubs,
   hema_events,
@@ -126,7 +126,7 @@ graph %>%
 ### Visualizing Communities
 
 ``` r
-viz <- visualize_communities(graph)
+viz <- visualize_communities(graph, show_labels = FALSE)
 print(viz)
 ```
 

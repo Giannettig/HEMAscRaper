@@ -8,7 +8,7 @@ output: github_document
 
 ## Installation
 
-To install the development version of the package, use:
+To install the development version of the package, use: 
 
 ```r
 # Install devtools if not already installed
