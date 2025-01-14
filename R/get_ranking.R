@@ -1,20 +1,21 @@
 #' @title Retrieve HEMA Ranking Data
 #'
 #' @description
-#' Downloads HEMA ranking data from multiple ranking URLs and combines it into a single data frame.
-#' By default (\code{incremental = TRUE}), it fetches a snapshot of rankings for each base URL,
-#' attaching the current system date. When \code{incremental = FALSE}, it attempts a more
-#' exhaustive retrieval (including all months for each ranking URL), which can be time-consuming.
+#' Downloads HEMA ranking data from multiple ranking URLs and combines it into a
+#' sißngle data frame. By default (`incremental = TRUE`), it fetches a
+#' snapshot of rankings for each base URL, attaching the current system date. When
+#' `incremental = FALSE`, it attempts a more exhaustive retrieval (including
+#' all months for each ranking URL), which can be time-consuming.
 #'
 #' @details
-#' - If \code{incremental = FALSE}, the function iterates over all month options for each
+#' - If `incremental = FALSE`, the function iterates over all month options for each
 #'   ranking URL, potentially resulting in a very large number of page fetches.
 #'   (This process could take a few hours, depending on network and server speed.)
-#' - If \code{incremental = TRUE}, it fetches only the base URLs and assigns the current date
-#'   to the \code{month_date} column, resulting in a “snapshot” of the current standings.
+#' - If `incremental = TRUE`, it fetches only the base URLs and assigns the current date
+#'   to the `month_date` column, resulting in a "snapshot" of the current standings.
 #'
-#' @param incremental Logical. If \code{TRUE}, fetches rankings from the base URLs only,
-#'   labeling them with the current date. If \code{FALSE}, iterates over all known month
+#' @param incremental Logical. If `TRUE`, fetches rankings from the base URLs only,
+#'   labeling them with the current date. If `FALSE`, iterates over all known month
 #'   options for each base URL (this can be very slow).
 #'
 #' @return A tibble (data frame) of ranking data with columns such as:
@@ -70,6 +71,7 @@ get_ranking <- function(incremental = TRUE) {
       paste0("&year=", parts[1], "&month=", parts[2])
     })
   
+  message("Searching HEMA Ratings for Ranking")
   # If incremental = FALSE, build a URL for every combination of base URL and month link
   # Otherwise, just fetch each base URL once and add the current date
   if (!incremental) {

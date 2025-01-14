@@ -87,11 +87,34 @@ visualized with `visualize_communities()`.
 ### Generating Communities
 
 ``` r
+
+hema_match_results <- if (file.exists(file.path(path, "hema_match_results.csv"))) {
+    readr::read_csv(file.path(path, "hema_match_results.csv"), show_col_types = FALSE)
+  } else {
+    HEMAscRaper::hema_match_results
+  }
+  
+  hema_clubs <- if (file.exists(file.path(path, "hema_clubs.csv"))) {
+    readr::read_csv(file.path(path, "hema_clubs.csv"), show_col_types = FALSE)
+  } else {
+    HEMAscRaper::hema_clubs
+  }
+  
+  hema_events <- if (file.exists(file.path(path, "hema_events.csv"))) {
+    readr::read_csv(file.path(path, "hema_events.csv"), show_col_types = FALSE)
+  } else {
+    HEMAscRaper::hema_events
+  }
+  
+
 graph <- generate_communities_graph(
   year = 2024,
   tournament_weapon = "Steel Longsword",
-  weight_threshold = 5,
-  population_threshold = 10
+  weight_threshold = 6,
+  population_threshold = 15,
+  hema_clubs,
+  hema_events,
+  hema_match_results
 )
 
 # View filtered nodes
