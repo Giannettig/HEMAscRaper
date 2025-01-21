@@ -31,7 +31,7 @@
 #'
 #' @format A data frame with the following columns:
 #' \describe{
-#'   \item{id}{Integer. Unique identifier for the country.}
+#'   \item{country_id}{Integer. Unique identifier for the country.}
 #'   \item{name}{Character. Name of the country.}
 #'   \item{region}{Character. Region of the country.}
 #'   \item{sub_region}{Character. Sub-region of the country.}

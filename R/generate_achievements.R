@@ -73,7 +73,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv = FALSE) {
     dplyr::select(-club_id) %>%
     dplyr::left_join(hema_fighters, by = c("fighter_id", "fighter_name")) %>%
     dplyr::left_join(hema_events, by = c("event_id", "event_name")) %>%
-    dplyr::left_join(hema_countries, by = c("event_country" = "name"))%>%select(-id) %>%
+    dplyr::left_join(hema_countries, by = c("event_country" = "name"))%>%select(-country_id) %>%
     dplyr::rename(
       event_region = "region",
       event_sub_region = "sub_region",
@@ -83,7 +83,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv = FALSE) {
       hema_clubs %>% dplyr::select(-club_name),
       by = c("fighter_club_id" = "club_id")
     ) %>%
-    dplyr::left_join(hema_countries%>%select(-id,-population,-community), by = c("club_country" = "name")) %>%
+    dplyr::left_join(hema_countries%>%select(-country_id,-population,-community), by = c("club_country" = "name")) %>%
     dplyr::rename(
       club_region = "region",
       club_sub_region = "sub_region",
