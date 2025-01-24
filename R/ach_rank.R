@@ -36,7 +36,7 @@ ach_rank_longsword <- function(data) {
     dplyr::mutate(
       rank = dplyr::row_number(),
       total_fighters = dplyr::n(),
-      percentile = rank / total_fighters * 100
+      percentile = rank / total_fighters
     ) %>%
     dplyr::ungroup()
 

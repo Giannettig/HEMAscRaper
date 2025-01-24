@@ -74,6 +74,9 @@ get_ranking <- function(incremental = TRUE) {
   message("Searching HEMA Ratings for Ranking")
   # If incremental = FALSE, build a URL for every combination of base URL and month link
   # Otherwise, just fetch each base URL once and add the current date
+  
+  incremental=TRUE #hard override because the scrape now would take 5 hours
+  
   if (!incremental) {
     # This process can be very long (potentially hours)
     links <- purrr::map(ranking_urls, ~ paste0(.x, months_links)) %>%

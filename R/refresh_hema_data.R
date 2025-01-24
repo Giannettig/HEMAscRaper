@@ -189,7 +189,7 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
   
   purrr::walk(names(data_list), function(name) {
     file_path <- file.path(path, paste0(name, ".csv"))
-    readr::write_csv(data_list[[name]], file = file_path, na = "")
+    readr::write_csv(data_list[[name]], file = file_path, na = "", quote="all")
   })
   
   message("calculating HEMA Achievements")
