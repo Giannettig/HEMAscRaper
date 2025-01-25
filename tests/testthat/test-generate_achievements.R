@@ -239,3 +239,63 @@ test_that("debug achievement outputs (no empty dataframes allowed)", {
     }
   })
 })
+
+###############################################################################
+# 5) Check for curly brackets in achievement name or description
+###############################################################################
+test_that("achievement name or description contains curly brackets", {
+  test_data <- HEMAscRaper::test_data
+  
+  # Retrieve all `ach_` prefixed functions from HEMAscRaper namespace
+  achievement_list <- grep(
+    "^ach_",
+    ls(envir = asNamespace("HEMAscRaper"), all.names = TRUE),
+    value = TRUE
+  )
+  
+  achievement_functions <- stats::setNames(
+    lapply(achievement_list, get, envir = asNamespace("HEMAscRaper")),
+    achievement_list
+  )
+  
+  # Collect results from all achievement functions
+  all_results <- purrr::imap_dfr(achievement_functions, function(fn, fn_name) {
+    result <- tryCatch(fn(test_data), error = function(e) NULL)
+    if (is.null(result)) {
+      return(tibble::tibble(
+        achievement_func = fn_name,
+        achievement_name = character(0),
+        achievement_description = character(0)
+      ))
+    }
+    result %>%
+      dplyr::select(achievement_name, achievement_description) %>%
+      dplyr::mutate(achievement_func = fn_name)
+  })
+  
+  # Check for curly brackets in achievement_name or achievement_description
+  issues <- all_results %>%
+    dplyr::filter(
+      stringr::str_detect(achievement_name, "\\{.+\\}") |
+        stringr::str_detect(achievement_description, "\\{.+\\}")
+    ) %>%
+    dplyr::distinct(achievement_func, achievement_name, achievement_description)
+  
+  # Format the output message
+  if (nrow(issues) > 0) {
+    message <- paste(
+      sprintf(
+        "- Function: %s, Name: '%s', Description: '%s'",
+        issues$achievement_func,
+        issues$achievement_name,
+        issues$achievement_description
+      ),
+      collapse = "\n"
+    )
+    fail(paste(
+      "The following achievements contain unresolved curly brackets:\n", message
+    ))
+  } else {
+    expect_true(TRUE)  # Pass the test if no issues are found
+  }
+})

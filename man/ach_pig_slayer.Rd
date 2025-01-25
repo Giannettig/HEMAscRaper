@@ -7,36 +7,36 @@
 ach_pig_slayer(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{match_id}{Identifier of the match}
-  \item{opponent_id}{Identifier of the opponent}
-  \item{result}{Result of the match ("WIN" or "LOSS")}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"Pig Slayer!"}
-  \item{achievement_description}{Includes the actual number of victories}
-  \item{achievement_icon}{e.g., "pig_slayer_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Pig Slayer!" achievement based on victories against Alexander Stankievich.
+Awards achievements to fighters based on their performance against Alexander
+Stankievich.
+}
+\details{
+Tiers are awarded based on victories against Alexander Stankievich:
+- Epic (4): 5+ wins with no losses
+- Gold (3): 5+ wins
+- Silver (2): 3+ wins
+- Bronze (1): 1+ win
+}
+\examples{
+\dontrun{
+achievements <- ach_pig_slayer(tournament_data)
+}
 
-Tiers:
-- Epic (tier_id=4): ≥5 victories and no losses
-- Gold (tier_id=3): ≥5 victories
-- Silver (tier_id=2): ≥3 victories
-- Bronze (tier_id=1): ≥1 victory
-
-The achievement description dynamically includes the number of victories.
 }
 \keyword{internal}

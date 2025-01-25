@@ -7,27 +7,33 @@
 ach_showing_up(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{event_year}{Year of the event}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1 for Unique)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier in that year}
-  \item{achievement_tier}{"Unique"}
-  \item{achievement_name}{"Showing Up is Part of the Success! - <Year>"}
-  \item{achievement_description}{Dynamic description mentioning the year}
-  \item{achievement_icon}{"showing_up_unique.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Showing Up is Part of the Success!" achievement to fighters who participated in a tournament in a given year.
-- Unique (tier_id=1): Awarded to all fighters who participated in at least one tournament in a year.
+Awards achievements to fighters for participating in tournaments during a
+given year.
+}
+\details{
+This is a unique tier achievement awarded to all fighters who participate in
+at least one tournament during the year.
+}
+\examples{
+\dontrun{
+achievements <- ach_showing_up(tournament_data)
+}
+
 }
 \keyword{internal}

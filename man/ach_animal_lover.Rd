@@ -7,29 +7,41 @@
 ach_animal_lover(data)
 }
 \arguments{
-\item{data}{A data frame containing HEMA tournament information. Required columns include:
-- `fighter_id`: Unique identifier for each fighter.
-- `event_year`: Year of the event.
-- `event_id`: Unique identifier for events.
-- `tournament_id`: Unique identifier for tournaments.
-- `event_brand`: Event name or branding information.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with the following columns:
-  - `fighter_id`: Unique identifier for each fighter.
-  - `tier_id`: Achievement tier level.
-  - `achieved`: Logical, indicating if the achievement was earned.
-  - `percentile`: Proportion of fighters achieving this tier in the dataset.
-  - `achievement_tier`: Name of the tier (e.g., Bronze).
-  - `achievement_name`: Name of the achievement.
-  - `achievement_description`: Description of the achievement with dynamic details.
-  - `achievement_icon`: Icon file associated with the achievement.
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
+}
 }
 \description{
-Identifies fighters who participated in tournaments featuring an animal mascot. Awards achievements based on the number of distinct tournaments attended in a given year.
+Awards achievements to fighters who participate in tournaments with animal-themed
+names or mascots (e.g., tournaments containing words like "penguin", "lion",
+"bear", etc.).
+}
+\details{
+Tiers are awarded based on number of distinct animal-themed tournaments:
+- Epic (4): 8+ tournaments
+- Gold (3): 5+ tournaments
+- Silver (2): 3+ tournaments
+- Bronze (1): 1+ tournaments
+
+The achievement considers both explicit animal names in tournament titles and
+specific tournaments known to have animal mascots (e.g., "bohema",
+"helsinki longsword open").
 }
 \examples{
-# Example usage:
-# ach_animal_lover(data)
+\dontrun{
+achievements <- ach_animal_lover(tournament_data)
+}
+
 }
 \keyword{internal}

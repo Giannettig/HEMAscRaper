@@ -2,33 +2,38 @@
 % Please edit documentation in R/ach_hero_of_the_nation.R
 \name{ach_hero_of_the_nation}
 \alias{ach_hero_of_the_nation}
-\title{Every Nation Needs a Hero Achievement}
+\title{Hero of the Nation Achievement}
 \usage{
 ach_hero_of_the_nation(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter.}
-  \item{event_year}{Year of the event.}
-  \item{club_country}{Country of the fighter's club.}
-  \item{result}{Result of the fight (e.g., "WIN").}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter.}
-  \item{tier_id}{Numeric tier ID.}
-  \item{achieved}{Logical, TRUE if achieved.}
-  \item{percentile}{Proportion of fighters who achieved this tier.}
-  \item{achievement_tier}{Tier name (Unique).}
-  \item{achievement_name}{Name of the achievement.}
-  \item{achievement_description}{Description of the achievement.}
-  \item{achievement_icon}{Filename of the achievement icon.}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Every Nation Needs a Hero" achievement to fighters who won the most fights in their country (by `club_country`) in a given year.
+Awards achievements to fighters who win the most fights in their home country
+within a given year.
+}
+\details{
+This is a unique tier achievement awarded to fighters who achieve the highest
+number of wins in their respective countries for a given year.
+}
+\examples{
+\dontrun{
+achievements <- ach_hero_of_the_nation(tournament_data)
+}
+
 }
 \keyword{internal}

@@ -1,3 +1,36 @@
+#' Tournament Warrior Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the total number of tournaments
+#' they've participated in.
+#'
+#' @details
+#' Tiers are awarded based on number of tournaments:
+#' - Epic (4): 50+ tournaments
+#' - Gold (3): 20+ tournaments
+#' - Silver (2): 10+ tournaments
+#' - Bronze (1): 5+ tournaments
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_tournament_warrior(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_tournament_warrior <- function(data) {
   
   # Define tiers

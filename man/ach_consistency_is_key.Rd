@@ -2,18 +2,38 @@
 % Please edit documentation in R/ach_consistency.R
 \name{ach_consistency_is_key}
 \alias{ach_consistency_is_key}
-\title{ach_consistency_is_key}
+\title{Consistency is Key Achievement}
 \usage{
 ach_consistency_is_key(data)
 }
 \arguments{
-\item{data}{A dataset containing match data, including `event_year`, `fighter_id`, and `event_id`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with fighters who participated in the most events in a given year.
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
+}
 }
 \description{
-Awarded to the fighter who participated in the most events during a specific year.
-If multiple fighters share the highest number of events participated in, they all receive the achievement.
+Awards achievements to fighters who participate in the most events within a
+given year.
+}
+\details{
+This is a unique tier achievement awarded only to fighters who participated in
+the maximum number of events in a given year.
+}
+\examples{
+\dontrun{
+achievements <- ach_consistency_is_key(tournament_data)
+}
+
 }
 \keyword{internal}

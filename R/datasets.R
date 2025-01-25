@@ -1,7 +1,10 @@
-#' HEMA Datasets
+#' @title HEMA Datasets
 #'
-#' This file documents all datasets used in the HEMA package, including clubs, countries, events, fighters, fights, match results, and tournaments.
+#' @description
+#' Internal documentation for all datasets used in the HEMA package, including clubs,
+#' countries, events, fighters, fights, match results, and tournaments.
 #'
+#' @keywords internal
 
 #' HEMA Clubs Dataset
 #'
@@ -38,6 +41,8 @@
 #'   \item{population}{Int Active Longsword fencers in community}
 #'   \item{community}{Factor Longsword community id}
 #'   \item{community_label}{Character Community Label}
+#'   \item{country_code}{Character Alpha-2 ISO code}
+#'   
 #' }
 #'
 #' @examples
@@ -202,3 +207,19 @@
 #'     dplyr::summarize(avg_rating = mean(weighted_rating, na.rm = TRUE))
 #' }
 "hema_rankings"
+
+#' @title HEMA Achievements Dataset
+#' @description A dataset containing detailed information on HEMA fighters' achievements, including tier levels, percentiles, and dynamic descriptions of their accomplishments.
+#' @format A tibble with 8 columns:
+#' \describe{
+#'   \item{fighter_id}{A numeric identifier uniquely assigned to each fighter.}
+#'   \item{tier_id}{A numeric identifier representing the tier of the achievement (e.g., Bronze = 1, Silver = 2, Gold = 3, Epic = 4).}
+#'   \item{achieved}{A logical value indicating whether the achievement was attained (`TRUE`) or not (`FALSE`).}
+#'   \item{percentile}{A numeric value representing the fighter's percentile rank for the achievement, expressed as a percentage.}
+#'   \item{achievement_tier}{A character string indicating the tier of the achievement (e.g., "Bronze", "Silver", "Gold", "Epic").}
+#'   \item{achievement_name}{A character string providing the name of the achievement (e.g., "The Pilgrim 2012").}
+#'   \item{achievement_description}{A character string describing the achievement dynamically (e.g., "You fought in the most countries (3) in 2012!").}
+#'   \item{achievement_icon}{A character string indicating the filename of the icon associated with the achievement (e.g., "pilgrim_epic.png").}
+#' }
+#' @details This dataset is generated as part of the HEMA Analyzer system and provides detailed insights into the achievements of fighters in various competitions. Achievements are dynamically generated based on specific criteria such as participation in tournaments, victories, and diversity of competition regions.
+"hema_achievements"

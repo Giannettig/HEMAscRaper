@@ -7,29 +7,33 @@
 ach_king_midas(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{event_year}{Year of the event}
-  \item{stage}{Stage of the match (e.g., "Gold Final", "Winner's Gold Match")}
-  \item{result}{Match result, e.g., "WIN", "LOSS"}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (4 for Epic)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier in that year}
-  \item{achievement_tier}{"Epic"}
-  \item{achievement_name}{"King Midas"}
-  \item{achievement_description}{Dynamic description mentioning the number of gold medals and the year}
-  \item{achievement_icon}{"king_midas_epic.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Epic")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "King Midas" achievement to the fighter who won the most gold medals in a given year.
-- Epic (tier_id=4): Awarded to the fighter with the highest number of gold medals in a year.
+Awards achievements to fighters who win the most gold medals (tournament finals)
+in a given year.
+}
+\details{
+This is a unique tier achievement awarded to fighters who win the most gold
+medals (tournament finals) in a given year.
+}
+\examples{
+\dontrun{
+achievements <- ach_king_midas(tournament_data)
+}
+
 }
 \keyword{internal}

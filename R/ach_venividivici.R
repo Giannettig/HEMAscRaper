@@ -1,3 +1,33 @@
+#' Veni Vidi Vici Achievement
+#'
+#' @description
+#' Awards achievements to fighters who win a tournament final in their very first
+#' tournament.
+#'
+#' @details
+#' This is a unique tier achievement awarded to fighters who achieve victory in a
+#' tournament final during their first-ever tournament appearance.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (always 1)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier (always "Unique")
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_veni_vidi_vici(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_veni_vidi_vici <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(

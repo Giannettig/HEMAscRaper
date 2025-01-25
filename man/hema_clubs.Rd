@@ -21,15 +21,31 @@ A data frame with the following columns:
 hema_clubs
 }
 \description{
-This file documents all datasets used in the HEMA package, including clubs, countries, events, fighters, fights, match results, and tournaments.
-}
-\details{
-HEMA Clubs Dataset
-
-This dataset contains information about historical European martial arts (HEMA) clubs, including their names and associated metadata.
+Internal documentation for all datasets used in the HEMA package, including clubs,
+countries, events, fighters, fights, match results, and tournaments.
 }
 \examples{
 data(hema_clubs)
 head(hema_clubs)
 }
-\keyword{datasets}
+\keyword{(HEMA)}
+\keyword{Clubs}
+\keyword{Dataset}
+\keyword{European}
+\keyword{HEMA}
+\keyword{This}
+\keyword{about}
+\keyword{and}
+\keyword{arts}
+\keyword{associated}
+\keyword{clubs,}
+\keyword{contains}
+\keyword{dataset}
+\keyword{historical}
+\keyword{including}
+\keyword{information}
+\keyword{internal}
+\keyword{martial}
+\keyword{metadata.}
+\keyword{names}
+\keyword{their}

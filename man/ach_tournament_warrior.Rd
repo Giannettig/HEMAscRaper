@@ -2,39 +2,41 @@
 % Please edit documentation in R/ach_tournament_warrior.R
 \name{ach_tournament_warrior}
 \alias{ach_tournament_warrior}
-\title{Tournaments Fought Achievement}
+\title{Tournament Warrior Achievement}
 \usage{
 ach_tournament_warrior(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{tournament_id}{Identifier of the tournament}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"Tournament Warrior - <Tier>"}
-  \item{achievement_description}{Includes the actual number of tournaments fought}
-  \item{achievement_icon}{e.g., "tournament_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award achievements based on the number of tournaments a fighter has participated in.
+Awards achievements to fighters based on the total number of tournaments
+they've participated in.
+}
+\details{
+Tiers are awarded based on number of tournaments:
+- Epic (4): 50+ tournaments
+- Gold (3): 20+ tournaments
+- Silver (2): 10+ tournaments
+- Bronze (1): 5+ tournaments
+}
+\examples{
+\dontrun{
+achievements <- ach_tournament_warrior(tournament_data)
+}
 
-Tiers:
-- Epic (tier_id=4): Fought in more than 50 tournaments
-- Gold (tier_id=3): Fought in 20 or more tournaments
-- Silver (tier_id=2): Fought in 10 or more tournaments
-- Bronze (tier_id=1): Fought in 5 or more tournaments
-
-The achievement description dynamically includes the number of tournaments fought.
 }
 \keyword{internal}

@@ -31,7 +31,7 @@ normalize_events <- function(name) {
   name <- textclean::replace_non_ascii(name) |> # Remove non-ASCII characters
     tolower() |> # Convert to lowercase
     stringr::str_remove_all(
-      "^\\d+\\.?\\s*|^(\\d+|\\d+[\u00BA\u00AA]|1st|2nd|3rd|\\d+th|\\d+st|\\d+nd|\\d+rd)\\s*|^(iv|v|vi{1,3}|vii|viii|ix|x{1,3}|l|c|d|m)\\s*|#\\d+\\s*$|\\s*event \\d+$|\\s*'\\d{2}\\s*$|\\s*\\d+$"
+      "^\\d+\\.?\\s*|^\\s*(\\d+(st|nd|rd|th)?|[ivxlcdm]+|1st|2nd|3rd)\\s+|#\\d+\\s*$|\\s*event\\s*\\d+$|\\s*'\\d{2}\\s*$|\\s*\\d+$"
     ) |> # Remove unwanted patterns
     stringr::str_to_title() |> # Convert to title case
     stringr::str_squish() # Trim and remove extra spaces

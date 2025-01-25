@@ -1,3 +1,40 @@
+#' Epiphany of Steel Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the number of different steel weapon
+#' categories they've competed with.
+#'
+#' @details
+#' Tiers are awarded based on number of distinct steel weapon categories:
+#' - Epic (4): 7+ weapons
+#' - Gold (3): 6 weapons
+#' - Silver (2): 5 weapons
+#' - Bronze (1): 3+ weapons
+#'
+#' The main steel weapons considered are: Steel Sabre, Steel Single Rapier,
+#' Steel Rapier & Dagger, Steel Single Sidesword, Steel Smallsword,
+#' Steel Messer, and Steel Longsword.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_epiphany_of_steel(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_epiphany_of_steel <- function(data) {
   # 7 main steel HEMA weapons
   main_steel_weapons <- c(

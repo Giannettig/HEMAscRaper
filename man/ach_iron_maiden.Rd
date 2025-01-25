@@ -7,29 +7,36 @@
 ach_iron_maiden(data)
 }
 \arguments{
-\item{data}{A data frame with at least `fighter_id` and `tournament_weapon`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{One of "Bronze", "Silver", "Gold", "Epic"}
-  \item{achievement_name}{"Iron Maiden"}
-  \item{achievement_description}{Includes the actual number of weapon categories fought}
-  \item{achievement_icon}{e.g. "iron_maiden_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award "Iron Maiden" based on how many distinct HEMA weapon categories
-a fighter has fought in. The tiers are defined as:
-- Epic: ≥20 weapon categories
-- Gold: ≥15 weapon categories
-- Silver: ≥5  weapon categories
-- Bronze: ≥2  weapon categories
+Awards achievements to fighters based on the total number of different HEMA
+weapon categories they've competed with.
+}
+\details{
+Tiers are awarded based on number of distinct weapon categories:
+- Epic (4): 20+ weapons
+- Gold (3): 15+ weapons
+- Silver (2): 5+ weapons
+- Bronze (1): 2+ weapons
+}
+\examples{
+\dontrun{
+achievements <- ach_iron_maiden(tournament_data)
+}
 
-The achievement description dynamically includes the fighter's actual number of weapon categories fought.
 }
 \keyword{internal}

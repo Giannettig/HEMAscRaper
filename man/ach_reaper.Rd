@@ -2,18 +2,38 @@
 % Please edit documentation in R/ach_reaper.R
 \name{ach_reaper}
 \alias{ach_reaper}
-\title{ach_reaper}
+\title{The Reaper Achievement}
 \usage{
 ach_reaper(data)
 }
 \arguments{
-\item{data}{A dataset containing match data, including `event_year`, `fighter_id`, and `result`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with fighters who won the most fights globally in a given year.
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
+}
 }
 \description{
-Awarded to the fighter who won the most fights in the world during a specific year. 
-If multiple fighters share the most wins, they all receive the achievement.
+Awards achievements to fighters who achieve the highest number of wins globally
+in a given year.
+}
+\details{
+This is a unique tier achievement awarded to fighters who win the most fights
+in a given year.
+}
+\examples{
+\dontrun{
+achievements <- ach_reaper(tournament_data)
+}
+
 }
 \keyword{internal}

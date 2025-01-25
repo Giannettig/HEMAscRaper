@@ -1,3 +1,33 @@
+#' The Old Guard Achievement
+#'
+#' @description
+#' Awards achievements to fighters who have been competing in HEMA tournaments for
+#' the longest period of time.
+#'
+#' @details
+#' This is a unique tier achievement awarded to fighters who have the maximum
+#' interval between their first and last recorded fights.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (always 1)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier (always "Unique")
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_the_old_guard(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_the_old_guard <- function(data) {
   # Filter out rows with missing event_year or fighter_id
   data <- data %>% dplyr::filter(!is.na(event_year) & !is.na(fighter_id))

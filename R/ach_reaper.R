@@ -1,3 +1,33 @@
+#' The Reaper Achievement
+#'
+#' @description
+#' Awards achievements to fighters who achieve the highest number of wins globally
+#' in a given year.
+#'
+#' @details
+#' This is a unique tier achievement awarded to fighters who win the most fights
+#' in a given year.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (always 1)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier (always "Unique")
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_reaper(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_reaper <- function(data) {
   # Define achievement tier (unique for this achievement)
   tiers <- dplyr::tribble(

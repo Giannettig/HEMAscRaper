@@ -72,12 +72,14 @@ get_ranking_page <- function(ranking_month_url) {
     rvest::html_element("h2") %>%
     rvest::html_text()
   
-  # Extract the main table from the page
+normalize_events <- function(web_page) {
+  # Extract the main table
   main_table <- web_page %>%
-    rvest::html_element("#mainTable") %>%   # Select table by ID
+    rvest::html_element("#mainTable") %>%
     rvest::html_table() %>%
-    dplyr::select(1, 3, 5, 6)  # Adjust column indices as needed
-  
+    dplyr::select(1, 3, 5, 6) %>%  # Adjust column indices as needed
+    dplyr::mutate(Name = dplyr::na_if(Name, ""))  # Convert "" to NA
+
   # Extract fighter details (URLs, names, IDs)
   fighters_ids <- web_page %>%
     rvest::html_element("#mainTable") %>%
@@ -87,14 +89,16 @@ get_ranking_page <- function(ranking_month_url) {
       row <- .
       dplyr::tibble(
         fighter_url  = rvest::html_element(row, "a") %>% rvest::html_attr("href"),
-        fighter_name = rvest::html_element(row, "a") %>% rvest::html_text(),
+        fighter_name = rvest::html_element(row, "a") %>% rvest::html_text() %>% dplyr::na_if(""),  # Convert "" to NA
         fighter_id   = stringr::str_extract(fighter_url, "\\d+") %>% as.numeric()
       )
     }
-  
+
   # Verify that names in main_table and fighters_ids match
-  # (Because these are direct $-accesses outside a dplyr pipeline, .data$ is not needed)
   testthat::expect_identical(main_table$Name, fighters_ids$fighter_name)
+
+  return(list(main_table = main_table, fighters_ids = fighters_ids))
+}
   
   # Combine main table and fighter details with metadata
   final_table <- dplyr::bind_cols(

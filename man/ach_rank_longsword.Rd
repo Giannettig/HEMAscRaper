@@ -2,21 +2,41 @@
 % Please edit documentation in R/ach_rank.R
 \name{ach_rank_longsword}
 \alias{ach_rank_longsword}
-\title{ach_rank_longsword}
+\title{Rank Achievement}
 \usage{
 ach_rank_longsword(data)
 }
 \arguments{
-\item{data}{A dataset containing match data, including `tournament_weapon`, `event_year`, and `result`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame of fighters, their ranks, and corresponding achievements for each weapon and year.
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
+}
 }
 \description{
-Find the top fighters for each tournament weapon and year! Fighters are ranked based on their Bayesian win percentage, and achievements are awarded:
-- Epic: Top 1% of fighters.
-- Gold: Top 5% of fighters.
-- Silver: Top 15% of fighters.
-- Bronze: Top 30% of fighters.
+Awards achievements to fighters based on their performance ranking within each
+weapon category for a given year.
+}
+\details{
+Tiers are awarded based on fighter's percentile ranking:
+- Epic (4): Top 1%
+- Gold (3): Top 5%
+- Silver (2): Top 15%
+- Bronze (1): Top 30%
+}
+\examples{
+\dontrun{
+achievements <- ach_rank_longsword(tournament_data)
+}
+
 }
 \keyword{internal}

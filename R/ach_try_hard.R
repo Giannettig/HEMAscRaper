@@ -1,3 +1,38 @@
+#' Tryhard Achievement
+#'
+#' @description
+#' Awards achievements to fighters who participate in a high number of matches
+#' while maintaining a low win rate (below 30%) in a given year.
+#'
+#' @details
+#' Tiers are awarded based on number of matches (minimum 100 matches required):
+#' - Epic (4): Most matches in the year
+#' - Gold (3): 300+ matches
+#' - Silver (2): 200+ matches
+#' - Bronze (1): 100+ matches
+#'
+#' All tiers require a win rate below 30%.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_tryhard(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_tryhard <- function(data) {
   # Define tier details
   tier_details <- tibble::tribble(

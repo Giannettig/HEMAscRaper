@@ -7,31 +7,36 @@
 ach_island_breaker(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter.}
-  \item{event_year}{Year of the event.}
-  \item{event_community}{Community where the event was held.}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter.}
-  \item{tier_id}{Numeric tier ID.}
-  \item{achieved}{Logical, TRUE if achieved.}
-  \item{percentile}{Proportion of fighters who achieved this tier.}
-  \item{achievement_tier}{Tier name (Bronze, Silver, Gold, Epic).}
-  \item{achievement_name}{Name of the achievement.}
-  \item{achievement_description}{Description of the achievement.}
-  \item{achievement_icon}{Filename of the achievement icon.}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Island Breaker" achievement to fighters who fought in different HEMA scenes in a given year.
-- Bronze: Participated in 2 scenes.
-- Silver: Participated in 3 scenes.
-- Gold: Participated in 4 scenes.
-- Epic: Participated in 5 or more scenes.
+Awards achievements to fighters based on the number of different HEMA scenes
+they've competed in during a given year.
+}
+\details{
+Tiers are awarded based on number of distinct HEMA scenes per year:
+- Epic (4): 5+ scenes
+- Gold (3): 4 scenes
+- Silver (2): 3 scenes
+- Bronze (1): 2 scenes
+}
+\examples{
+\dontrun{
+achievements <- ach_island_breaker(tournament_data)
+}
+
 }
 \keyword{internal}

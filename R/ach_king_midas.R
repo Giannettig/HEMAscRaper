@@ -1,3 +1,33 @@
+#' King Midas Achievement
+#'
+#' @description
+#' Awards achievements to fighters who win the most gold medals (tournament finals)
+#' in a given year.
+#'
+#' @details
+#' This is a unique tier achievement awarded to fighters who win the most gold
+#' medals (tournament finals) in a given year.
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (always 4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier (always "Epic")
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_king_midas(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_king_midas <- function(data) {
   # Define tier details
   tier_details <- tibble::tribble(

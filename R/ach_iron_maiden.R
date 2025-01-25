@@ -1,3 +1,36 @@
+#' Iron Maiden Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the total number of different HEMA
+#' weapon categories they've competed with.
+#'
+#' @details
+#' Tiers are awarded based on number of distinct weapon categories:
+#' - Epic (4): 20+ weapons
+#' - Gold (3): 15+ weapons
+#' - Silver (2): 5+ weapons
+#' - Bronze (1): 2+ weapons
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_iron_maiden(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_iron_maiden <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(

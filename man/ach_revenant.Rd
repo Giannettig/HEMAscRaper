@@ -7,35 +7,36 @@
 ach_revenant(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{match_id}{Identifier of the match}
-  \item{event_date}{Date of the event (as Date or character)}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"The Revenant"}
-  \item{achievement_description}{Includes the actual interval of inactivity in years}
-  \item{achievement_icon}{e.g., "the_revenant_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "The Revenant" achievement based on returning to fight after periods of inactivity.
+Awards achievements to fighters who return to competition after long periods
+of inactivity.
+}
+\details{
+Tiers are awarded based on years of inactivity before return:
+- Epic (4): 10+ years
+- Gold (3): 7+ years
+- Silver (2): 5+ years
+- Bronze (1): 2+ years
+}
+\examples{
+\dontrun{
+achievements <- ach_revenant(tournament_data)
+}
 
-Tiers:
-- Epic (tier_id=4): Returned after at least ten years of inactivity
-- Gold (tier_id=3): Returned after seven years of inactivity
-- Silver (tier_id=2): Returned after five years of inactivity
-- Bronze (tier_id=1): Returned after at least two years of inactivity
-
-The achievement description dynamically includes the actual interval of inactivity.
 }
 \keyword{internal}

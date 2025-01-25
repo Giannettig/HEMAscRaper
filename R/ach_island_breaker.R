@@ -1,3 +1,36 @@
+#' Island Breaker Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the number of different HEMA scenes
+#' they've competed in during a given year.
+#'
+#' @details
+#' Tiers are awarded based on number of distinct HEMA scenes per year:
+#' - Epic (4): 5+ scenes
+#' - Gold (3): 4 scenes
+#' - Silver (2): 3 scenes
+#' - Bronze (1): 2 scenes
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_island_breaker(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_island_breaker <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(

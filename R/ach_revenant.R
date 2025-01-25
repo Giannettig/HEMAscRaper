@@ -1,3 +1,36 @@
+#' The Revenant Achievement
+#'
+#' @description
+#' Awards achievements to fighters who return to competition after long periods
+#' of inactivity.
+#'
+#' @details
+#' Tiers are awarded based on years of inactivity before return:
+#' - Epic (4): 10+ years
+#' - Gold (3): 7+ years
+#' - Silver (2): 5+ years
+#' - Bronze (1): 2+ years
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_revenant(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_revenant <- function(data) {
   # Define all tiers and their conditions
   tiers <- tibble::tribble(

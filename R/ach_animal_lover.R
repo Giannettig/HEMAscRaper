@@ -1,3 +1,41 @@
+#' Animal Lover Achievement
+#'
+#' @description
+#' Awards achievements to fighters who participate in tournaments with animal-themed
+#' names or mascots (e.g., tournaments containing words like "penguin", "lion",
+#' "bear", etc.).
+#'
+#' @details
+#' Tiers are awarded based on number of distinct animal-themed tournaments:
+#' - Epic (4): 8+ tournaments
+#' - Gold (3): 5+ tournaments
+#' - Silver (2): 3+ tournaments
+#' - Bronze (1): 1+ tournaments
+#'
+#' The achievement considers both explicit animal names in tournament titles and
+#' specific tournaments known to have animal mascots (e.g., "bohema",
+#' "helsinki longsword open").
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_animal_lover(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_animal_lover <- function(data) {
   # Define all tiers and their conditions in a single data frame
   tiers <- tibble::tribble(

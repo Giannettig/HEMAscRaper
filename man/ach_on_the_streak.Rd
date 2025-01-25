@@ -2,41 +2,40 @@
 % Please edit documentation in R/ach_on_the_streak.R
 \name{ach_on_the_streak}
 \alias{ach_on_the_streak}
-\title{On the Streak Achievement}
+\title{On The Streak Achievement}
 \usage{
 ach_on_the_streak(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{match_id}{Identifier of the match}
-  \item{event_date}{Date of the event (as Date or character)}
-  \item{result}{Result of the match ("WIN" or "LOSS")}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"On the Streak!"}
-  \item{achievement_description}{Includes the actual number of victories in the streak}
-  \item{achievement_icon}{e.g., "on_the_streak_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "On the Streak!" achievement based on the longest uninterrupted winning streak.
+Awards achievements to fighters based on their longest uninterrupted winning streak.
+}
+\details{
+Tiers are awarded based on consecutive victories:
+- Epic (4): 50+ consecutive wins
+- Gold (3): 20+ consecutive wins
+- Silver (2): 10+ consecutive wins
+- Bronze (1): 5+ consecutive wins
+}
+\examples{
+\dontrun{
+achievements <- ach_on_the_streak(tournament_data)
+}
 
-Tiers:
-- Epic (tier_id=4): ≥50 victories
-- Gold (tier_id=3): ≥20 victories
-- Silver (tier_id=2): ≥10 victories
-- Bronze (tier_id=1): ≥5 victories
-
-The achievement description dynamically includes the fighter's actual maximum streak.
 }
 \keyword{internal}

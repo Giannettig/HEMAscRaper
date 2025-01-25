@@ -1,3 +1,36 @@
+#' Conquerer of the Continents Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the number of different continents
+#' they've competed in.
+#'
+#' @details
+#' Tiers are awarded based on number of distinct continents:
+#' - Epic (4): 5+ continents
+#' - Gold (3): 4 continents
+#' - Silver (2): 3 continents
+#' - Bronze (1): 2 continents
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_conquerer_of_the_continents(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_conquerer_of_the_continents <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(

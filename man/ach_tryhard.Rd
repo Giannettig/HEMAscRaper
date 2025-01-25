@@ -7,33 +7,38 @@
 ach_tryhard(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{event_year}{Year of the event}
-  \item{match_id}{Identifier of the match}
-  \item{result}{Match result, e.g., "WIN", "LOSS"}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher in that year}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"Tryhard - <Tier>"}
-  \item{achievement_description}{Includes the actual number of matches fought, win rate, and year}
-  \item{achievement_icon}{e.g., "tryhard_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Tryhard" achievement based on the number of matches fought in a year
-with a win rate under 30%. Tiers are assigned as follows:
-- Bronze (tier_id=1): Fought in 100 or more matches
-- Silver (tier_id=2): Fought in 200 or more matches
-- Gold (tier_id=3): Fought in 300 or more matches
-- Epic (tier_id=4): Fought the most matches in a year among those meeting the criteria
+Awards achievements to fighters who participate in a high number of matches
+while maintaining a low win rate (below 30%) in a given year.
+}
+\details{
+Tiers are awarded based on number of matches (minimum 100 matches required):
+- Epic (4): Most matches in the year
+- Gold (3): 300+ matches
+- Silver (2): 200+ matches
+- Bronze (1): 100+ matches
+
+All tiers require a win rate below 30%.
+}
+\examples{
+\dontrun{
+achievements <- ach_tryhard(tournament_data)
+}
+
 }
 \keyword{internal}

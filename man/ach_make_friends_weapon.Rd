@@ -2,33 +2,38 @@
 % Please edit documentation in R/ach_make_friends.R
 \name{ach_make_friends_weapon}
 \alias{ach_make_friends_weapon}
-\title{It Is Good to Make Friends Achievement (Per Weapon)}
+\title{Make Friends Achievement}
 \usage{
 ach_make_friends_weapon(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter.}
-  \item{event_year}{Year of the event.}
-  \item{opponent_id}{Identifier of the opponent.}
-  \item{tournament_weapon}{The weapon category of the tournament.}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter.}
-  \item{tier_id}{Numeric tier ID.}
-  \item{achieved}{Logical, TRUE if achieved.}
-  \item{percentile}{Proportion of fighters who achieved this tier, relative to all fighters.}
-  \item{achievement_tier}{Tier name (Unique).}
-  \item{achievement_name}{Name of the achievement.}
-  \item{achievement_description}{Description of the achievement.}
-  \item{achievement_icon}{Filename of the achievement icon.}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "It Is Good to Make Friends" achievement to fighters who faced the most unique opponents in a specific weapon category and year. Ties are allowed.
+Awards achievements to fighters who face the most unique opponents in a specific
+weapon category during a given year.
+}
+\details{
+This is a unique tier achievement awarded to fighters who face the highest number
+of different opponents in each weapon category for a given year.
+}
+\examples{
+\dontrun{
+achievements <- ach_make_friends_weapon(tournament_data)
+}
+
 }
 \keyword{internal}

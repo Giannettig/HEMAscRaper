@@ -7,35 +7,33 @@
 ach_veni_vidi_vici(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{match_id}{Identifier of the match}
-  \item{event_date}{Date of the event (as Date or character)}
-  \item{result}{Result of the match ("WIN" or "LOSS")}
-  \item{tournament_name}{Name of the tournament}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier}
-  \item{achievement_tier}{"Unique"}
-  \item{achievement_name}{"Veni Vidi Vici"}
-  \item{achievement_description}{Includes the name of the first tournament where the achievement was made}
-  \item{achievement_icon}{"veni_vidi_vici.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "Veni Vidi Vici" achievement to fighters who won a final match
-in their very first tournament.
+Awards achievements to fighters who win a tournament final in their very first
+tournament.
+}
+\details{
+This is a unique tier achievement awarded to fighters who achieve victory in a
+tournament final during their first-ever tournament appearance.
+}
+\examples{
+\dontrun{
+achievements <- ach_veni_vidi_vici(tournament_data)
+}
 
-Tiers:
-- Unique (tier_id=1): Successfully won a final match in the very first tournament.
-
-The achievement description dynamically includes the name of the tournament where the fighter achieved this.
 }
 \keyword{internal}

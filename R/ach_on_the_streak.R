@@ -1,3 +1,35 @@
+#' On The Streak Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on their longest uninterrupted winning streak.
+#'
+#' @details
+#' Tiers are awarded based on consecutive victories:
+#' - Epic (4): 50+ consecutive wins
+#' - Gold (3): 20+ consecutive wins
+#' - Silver (2): 10+ consecutive wins
+#' - Bronze (1): 5+ consecutive wins
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_on_the_streak(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_on_the_streak <- function(data) {
   # Define tiers
   tiers <- tibble::tribble(

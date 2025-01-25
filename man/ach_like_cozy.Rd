@@ -2,34 +2,38 @@
 % Please edit documentation in R/ach_like_cozy.R
 \name{ach_like_cozy}
 \alias{ach_like_cozy}
-\title{I like it Cozy Achievement}
+\title{I Like It Cozy Achievement}
 \usage{
 ach_like_cozy(data)
 }
 \arguments{
-\item{data}{A data frame with at least the following columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter}
-  \item{club_country}{Country of the fighter's club}
-  \item{event_country}{Country where the event took place}
-  \item{match_id}{Identifier of the match}
-}}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1)}
-  \item{achieved}{Logical, always TRUE for achievers}
-  \item{percentile}{Proportion of fighters who achieved this}
-  \item{achievement_tier}{"Unique"}
-  \item{achievement_name}{"I like it Cozy"}
-  \item{achievement_description}{Includes the total number of home matches}
-  \item{achievement_icon}{"i_like_it_cozy_unique.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award the "I like it Cozy" achievement to fighters who have never fought outside their home country
-and have fought more than 100 matches.
+Awards achievements to fighters who exclusively compete in their home country
+with a significant number of matches.
+}
+\details{
+This is a unique tier achievement awarded to fighters who have fought more than
+100 matches, all within their home country.
+}
+\examples{
+\dontrun{
+achievements <- ach_like_cozy(tournament_data)
+}
+
 }
 \keyword{internal}

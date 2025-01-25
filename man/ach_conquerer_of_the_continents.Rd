@@ -7,31 +7,36 @@
 ach_conquerer_of_the_continents(data)
 }
 \arguments{
-\item{data}{A data frame with at least `fighter_id` and `event_region`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{ID of the fighter}
-  \item{tier_id}{Numeric tier ID (1-4)}
-  \item{achieved}{Logical, TRUE if achieved}
-  \item{percentile}{Proportion of fighters who achieved this tier or higher}
-  \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-  \item{achievement_name}{"The Conquerer of the continents"}
-  \item{achievement_description}{Includes the actual number of continents visited}
-  \item{achievement_icon}{e.g. "the_conquerer_of_the_continents_bronze.png"}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award "The Conquerer of the continents" achievement based on how many distinct continents (event_region)
-a fighter has fought in.
+Awards achievements to fighters based on the number of different continents
+they've competed in.
+}
+\details{
+Tiers are awarded based on number of distinct continents:
+- Epic (4): 5+ continents
+- Gold (3): 4 continents
+- Silver (2): 3 continents
+- Bronze (1): 2 continents
+}
+\examples{
+\dontrun{
+achievements <- ach_conquerer_of_the_continents(tournament_data)
+}
 
-Tiers:
-- Epic (tier_id=4): visited >=5 continents
-- Gold (tier_id=3): visited >=4 continents
-- Silver (tier_id=2): visited >=3 continents
-- Bronze (tier_id=1): visited >=2 continents
-
-The description and icon are adjusted dynamically. The final description will include the actual number of continents visited.
 }
 \keyword{internal}

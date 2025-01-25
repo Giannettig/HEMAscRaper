@@ -7,13 +7,15 @@
 \format{
 A data frame with the following columns:
 \describe{
-  \item{id}{Integer. Unique identifier for the country.}
+  \item{country_id}{Integer. Unique identifier for the country.}
   \item{name}{Character. Name of the country.}
   \item{region}{Character. Region of the country.}
   \item{sub_region}{Character. Sub-region of the country.}
   \item{population}{Int Active Longsword fencers in community}
   \item{community}{Factor Longsword community id}
   \item{community_label}{Character Community Label}
+  \item{country_code}{Character Alpha-2 ISO code}
+  
 }
 }
 \usage{

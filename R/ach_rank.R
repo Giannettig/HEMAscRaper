@@ -1,3 +1,36 @@
+#' Rank Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on their performance ranking within each
+#' weapon category for a given year.
+#'
+#' @details
+#' Tiers are awarded based on fighter's percentile ranking:
+#' - Epic (4): Top 1%
+#' - Gold (3): Top 5%
+#' - Silver (2): Top 15%
+#' - Bronze (1): Top 30%
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_rank_longsword(tournament_data)
+#' }
+#'
+#' @keywords internal
 ach_rank_longsword <- function(data) {
   # Define achievement tiers
   tiers <- dplyr::tribble(

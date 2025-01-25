@@ -2,29 +2,38 @@
 % Please edit documentation in R/ach_old_guard.R
 \name{ach_the_old_guard}
 \alias{ach_the_old_guard}
-\title{Identify "The Old Guard"}
+\title{The Old Guard Achievement}
 \usage{
 ach_the_old_guard(data)
 }
 \arguments{
-\item{data}{A data frame containing at least `fighter_id` and `event_year`.}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with columns:
-\describe{
-  \item{fighter_id}{Identifier of the fighter(s) who achieved this.}
-  \item{tier_id}{Numeric tier ID for the achievement.}
-  \item{achieved}{Logical, always TRUE for those who achieved it.}
-  \item{percentile}{Proportion of total fighters achieving this.}
-  \item{achievement_tier}{Character, "Unique".}
-  \item{achievement_name}{Character, "The Old Guard".}
-  \item{achievement_description}{Character, description of the achievement.}
-  \item{achievement_icon}{Character, icon filename for this achievement.}
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (always 1)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier (always "Unique")
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
 }
 }
 \description{
-Internal function to award "The Old Guard" achievement.
-Determines which fighter(s) have the longest fighting interval, defined as the
-difference between their earliest and latest recorded `event_year`.
+Awards achievements to fighters who have been competing in HEMA tournaments for
+the longest period of time.
+}
+\details{
+This is a unique tier achievement awarded to fighters who have the maximum
+interval between their first and last recorded fights.
+}
+\examples{
+\dontrun{
+achievements <- ach_the_old_guard(tournament_data)
+}
+
 }
 \keyword{internal}

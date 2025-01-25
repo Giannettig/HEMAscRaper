@@ -2,42 +2,41 @@
 % Please edit documentation in R/ach_yearly_finals_tiers.R
 \name{ach_yearly_finals_tiers}
 \alias{ach_yearly_finals_tiers}
-\title{Yearly Finals Tiers Achievement}
+\title{Yearly Finals Achievement}
 \usage{
 ach_yearly_finals_tiers(data)
 }
 \arguments{
-\item{data}{A data frame containing HEMA event data. Required columns:
-- `fighter_id`: Unique identifier for each fighter.
-- `match_id`: Unique identifier for each match.
-- `event_year`: Year of the event.
-- `stage`: Stage of the match (e.g., final, gold match).}
+\item{data}{A data frame containing HEMA tournament match data}
 }
 \value{
-A data frame with the following columns:
-- `fighter_id`: Identifier of the fighter.
-- `tier_id`: Numeric tier level (1 = Bronze, 2 = Silver, 3 = Gold, 4 = Epic).
-- `achieved`: Logical, `TRUE` if the fighter achieved this tier.
-- `percentile`: Proportion of fighters achieving this tier or higher in the dataset.
-- `achievement_tier`: Achievement tier ("Bronze", "Silver", "Gold", "Epic").
-- `achievement_name`: Name of the achievement (e.g., "There Can Be Only One 2024 - Gold").
-- `achievement_description`: Description of the achievement with dynamic details.
-- `achievement_icon`: Icon file for the tier (e.g., "bronze_medal.png").
+A data frame of achievements with columns:
+\itemize{
+  \item fighter_id: Unique fighter identifier
+  \item tier_id: Achievement tier level (1-4)
+  \item achieved: Logical indicating if achievement earned
+  \item percentile: Fighter's percentile for this achievement
+  \item achievement_tier: Text description of tier
+  \item achievement_name: Name of the achievement
+  \item achievement_description: Description of what was achieved
+  \item achievement_icon: Icon file name for the achievement
+}
 }
 \description{
-Awards yearly achievements based on the number of final matches a fighter participates in each year.
-
-## Tiers
-- **Epic** (tier_id=4): Fought in 10 or more finals in a year.
-- **Gold** (tier_id=3): Fought in 5 or more finals in a year.
-- **Silver** (tier_id=2): Fought in 3 or more finals in a year.
-- **Bronze** (tier_id=1): Fought in at least 1 final in a year.
-
-The achievement description dynamically includes the number of finals participated in that year.
+Awards achievements to fighters based on the number of tournament finals
+they've reached in a given year.
+}
+\details{
+Tiers are awarded based on number of finals reached in a year:
+- Epic (4): 10+ finals
+- Gold (3): 5+ finals
+- Silver (2): 3+ finals
+- Bronze (1): 1+ finals
 }
 \examples{
-# Example usage:
-# achievements <- ach_yearly_finals_tiers(data)
-# head(achievements)
+\dontrun{
+achievements <- ach_yearly_finals_tiers(tournament_data)
+}
+
 }
 \keyword{internal}

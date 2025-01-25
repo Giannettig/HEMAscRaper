@@ -1,3 +1,37 @@
+#' Yearly Finals Achievement
+#'
+#' @description
+#' Awards achievements to fighters based on the number of tournament finals
+#' they've reached in a given year.
+#'
+#' @details
+#' Tiers are awarded based on number of finals reached in a year:
+#' - Epic (4): 10+ finals
+#' - Gold (3): 5+ finals
+#' - Silver (2): 3+ finals
+#' - Bronze (1): 1+ finals
+#'
+#' @param data A data frame containing HEMA tournament match data
+#'
+#' @return A data frame of achievements with columns:
+#' \itemize{
+#'   \item fighter_id: Unique fighter identifier
+#'   \item tier_id: Achievement tier level (1-4)
+#'   \item achieved: Logical indicating if achievement earned
+#'   \item percentile: Fighter's percentile for this achievement
+#'   \item achievement_tier: Text description of tier
+#'   \item achievement_name: Name of the achievement
+#'   \item achievement_description: Description of what was achieved
+#'   \item achievement_icon: Icon file name for the achievement
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' achievements <- ach_yearly_finals_tiers(tournament_data)
+#' }
+#'
+#' @keywords internal
+
 ach_yearly_finals_tiers <- function(data) {
   # Define tiers
   tier_details <- tibble::tribble(
