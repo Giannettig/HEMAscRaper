@@ -1,38 +1,3 @@
-#' Tournaments Fought Achievement
-#'
-#' @description
-#' Internal function to award achievements based on the number of tournaments a fighter has participated in.
-#'
-#' Tiers:
-#' - Epic (tier_id=4): Fought in more than 50 tournaments
-#' - Gold (tier_id=3): Fought in 20 or more tournaments
-#' - Silver (tier_id=2): Fought in 10 or more tournaments
-#' - Bronze (tier_id=1): Fought in 5 or more tournaments
-#'
-#' The achievement description dynamically includes the number of tournaments fought.
-#'
-#' @param data A data frame with at least the following columns:
-#' \describe{
-#'   \item{fighter_id}{Identifier of the fighter}
-#'   \item{tournament_id}{Identifier of the tournament}
-#' }
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{fighter_id}{ID of the fighter}
-#'   \item{tier_id}{Numeric tier ID (1-4)}
-#'   \item{achieved}{Logical, TRUE if achieved}
-#'   \item{percentile}{Proportion of fighters who achieved this tier or higher}
-#'   \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-#'   \item{achievement_name}{"Tournament Warrior - <Tier>"}
-#'   \item{achievement_description}{Includes the actual number of tournaments fought}
-#'   \item{achievement_icon}{e.g., "tournament_bronze.png"}
-#' }
-#'
-#' @importFrom dplyr group_by summarize mutate filter ungroup left_join select arrange
-#' @importFrom tibble tribble
-#' @importFrom stringr str_replace_all
-#' @keywords internal
 ach_tournament_warrior <- function(data) {
   
   # Define tiers
@@ -53,38 +18,49 @@ ach_tournament_warrior <- function(data) {
   tournament_counts <- tournament_counts %>%
     dplyr::mutate(
       achievement_tier = dplyr::case_when(
-        tournament_count > 50 ~ "Epic",
+        tournament_count > 50  ~ "Epic",
         tournament_count >= 20 ~ "Gold",
         tournament_count >= 10 ~ "Silver",
-        tournament_count >= 5 ~ "Bronze",
-        TRUE ~ NA_character_
+        tournament_count >= 5  ~ "Bronze",
+        TRUE                   ~ NA_character_
       )
     ) %>%
     dplyr::filter(!is.na(achievement_tier))
   
-  # Calculate percentiles
+  # Total fighters for percentile calculation
   total_fighters <- dplyr::n_distinct(data$fighter_id)
-  tournament_counts <- tournament_counts %>%
+  
+  # Calculate cumulative counts for percentiles
+  tier_counts <- tournament_counts %>%
     dplyr::group_by(achievement_tier) %>%
+    dplyr::summarize(tier_count = dplyr::n(), .groups = "drop") %>%
+    dplyr::arrange(dplyr::desc(achievement_tier)) %>%
+    dplyr::mutate(cumulative_count = cumsum(tier_count))
+  
+  # Join cumulative counts back to tournament_counts
+  tournament_counts <- tournament_counts %>%
+    dplyr::left_join(tier_counts, by = "achievement_tier") %>%
     dplyr::mutate(
-      percentile = n() / total_fighters
-    ) %>%
-    dplyr::ungroup()
+      percentile = (cumulative_count / total_fighters) * 100 # Percent of fighters with the achievement
+    )
   
   # Join tier details and create descriptions
   achievements <- tournament_counts %>%
     dplyr::left_join(tier_details, by = "achievement_tier") %>%
     dplyr::mutate(
       achievement_name = achievement_name_template,
-      achievement_description = stringr::str_replace_all(achievement_description_template, "\\{tournament_count\\}", as.character(tournament_count))
+      achievement_description = stringr::str_replace_all(
+        achievement_description_template,
+        "\\{tournament_count\\}", as.character(tournament_count)
+      )
     ) %>%
     dplyr::mutate(
       tier_id = dplyr::case_when(
         achievement_tier == "Bronze" ~ 1,
         achievement_tier == "Silver" ~ 2,
-        achievement_tier == "Gold" ~ 3,
-        achievement_tier == "Epic" ~ 4,
-        TRUE ~ NA_integer_
+        achievement_tier == "Gold"   ~ 3,
+        achievement_tier == "Epic"   ~ 4,
+        TRUE                         ~ NA_integer_
       ),
       achieved = TRUE
     ) %>%

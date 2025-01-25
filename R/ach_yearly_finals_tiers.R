@@ -1,42 +1,4 @@
-#' Yearly Finals Tiers Achievement
-#'
-#' @description
-#' Awards yearly achievements based on the number of final matches a fighter participates in each year.
-#'
-#' ## Tiers
-#' - **Epic** (tier_id=4): Fought in 10 or more finals in a year.
-#' - **Gold** (tier_id=3): Fought in 5 or more finals in a year.
-#' - **Silver** (tier_id=2): Fought in 3 or more finals in a year.
-#' - **Bronze** (tier_id=1): Fought in at least 1 final in a year.
-#'
-#' The achievement description dynamically includes the number of finals participated in that year.
-#'
-#' @param data A data frame containing HEMA event data. Required columns:
-#' - `fighter_id`: Unique identifier for each fighter.
-#' - `match_id`: Unique identifier for each match.
-#' - `event_year`: Year of the event.
-#' - `stage`: Stage of the match (e.g., final, gold match).
-#'
-#' @return A data frame with the following columns:
-#' - `fighter_id`: Identifier of the fighter.
-#' - `tier_id`: Numeric tier level (1 = Bronze, 2 = Silver, 3 = Gold, 4 = Epic).
-#' - `achieved`: Logical, `TRUE` if the fighter achieved this tier.
-#' - `percentile`: Proportion of fighters achieving this tier or higher in the dataset.
-#' - `achievement_tier`: Achievement tier ("Bronze", "Silver", "Gold", "Epic").
-#' - `achievement_name`: Name of the achievement (e.g., "There Can Be Only One 2024 - Gold").
-#' - `achievement_description`: Description of the achievement with dynamic details.
-#' - `achievement_icon`: Icon file for the tier (e.g., "bronze_medal.png").
-#'
-#' @importFrom dplyr group_by summarize mutate filter ungroup left_join select arrange
-#' @importFrom tibble tribble
-#' @importFrom stringr str_detect str_replace_all str_squish
-#' @keywords internal
-#' @examples
-#' # Example usage:
-#' # achievements <- ach_yearly_finals_tiers(data)
-#' # head(achievements)
 ach_yearly_finals_tiers <- function(data) {
-  
   # Define tiers
   tier_details <- tibble::tribble(
     ~achievement_tier, ~achievement_name_template,                     ~achievement_description_template,                   ~achievement_icon,
@@ -87,17 +49,40 @@ ach_yearly_finals_tiers <- function(data) {
     dplyr::group_by(event_year) %>%
     dplyr::summarise(total_fighters_in_year = dplyr::n_distinct(fighter_id), .groups = "drop")
   
-  # Join details and compute percentile
+  # Join total_fighters to yearly_counts
+  yearly_counts <- yearly_counts %>%
+    dplyr::left_join(total_fighters, by = "event_year")
+  
+  # Handle cases where total_fighters_in_year is missing
+  if (any(is.na(yearly_counts$total_fighters_in_year))) {
+    stop("Missing total_fighters_in_year for some event_years. Check your data and joins.")
+  }
+  
+  # Calculate rank and percentile
+  yearly_counts <- yearly_counts %>%
+    dplyr::group_by(event_year) %>%
+    dplyr::arrange(dplyr::desc(final_matches)) %>%
+    dplyr::mutate(
+      rank = dplyr::row_number(),
+      percentile = (rank / total_fighters_in_year) * 100  # Percentile reflects percentage of people with the achievement
+    ) %>%
+    dplyr::ungroup()
+  
+  # Join details and format output
   achievements <- yearly_counts %>%
     dplyr::left_join(tier_details, by = "achievement_tier") %>%
-    dplyr::left_join(total_fighters, by = "event_year") %>%
-    dplyr::group_by(event_year) %>%
-    dplyr::mutate(percentile = final_matches / total_fighters_in_year) %>%
-    dplyr::ungroup() %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      achievement_name = stringr::str_replace_all(achievement_name_template, "\\{event_year\\}", as.character(event_year)),
-      achievement_description = stringr::str_replace_all(achievement_description_template, "\\{final_matches\\}", as.character(final_matches))
+      achievement_name = stringr::str_replace_all(
+        achievement_name_template, 
+        "\\{event_year\\}", 
+        as.character(event_year)
+      ),
+      achievement_description = stringr::str_replace_all(
+        achievement_description_template, 
+        "\\{final_matches\\}", 
+        as.character(final_matches)
+      )
     ) %>%
     dplyr::ungroup() %>%
     # Add tier_id and achieved columns

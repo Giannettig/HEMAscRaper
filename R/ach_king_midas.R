@@ -1,50 +1,30 @@
-#' King Midas Achievement
-#'
-#' @description
-#' Internal function to award the "King Midas" achievement to the fighter who won the most gold medals in a given year.
-#' - Epic (tier_id=4): Awarded to the fighter with the highest number of gold medals in a year.
-#'
-#' @param data A data frame with at least the following columns:
-#' \describe{
-#'   \item{fighter_id}{Identifier of the fighter}
-#'   \item{event_year}{Year of the event}
-#'   \item{stage}{Stage of the match (e.g., "Gold Final", "Winner's Gold Match")}
-#'   \item{result}{Match result, e.g., "WIN", "LOSS"}
-#' }
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{fighter_id}{ID of the fighter}
-#'   \item{tier_id}{Numeric tier ID (4 for Epic)}
-#'   \item{achieved}{Logical, TRUE if achieved}
-#'   \item{percentile}{Proportion of fighters who achieved this tier in that year}
-#'   \item{achievement_tier}{"Epic"}
-#'   \item{achievement_name}{"King Midas"}
-#'   \item{achievement_description}{Dynamic description mentioning the number of gold medals and the year}
-#'   \item{achievement_icon}{"king_midas_epic.png"}
-#' }
-#'
-#' @importFrom dplyr group_by summarize mutate filter ungroup slice_max
-#' @importFrom tibble tribble
-#' @importFrom stringr str_replace_all
-#' @keywords internal
 ach_king_midas <- function(data) {
   # Define tier details
   tier_details <- tibble::tribble(
     ~achievement_tier, ~tier_id, ~achievement_name,  ~achievement_description_template,                           ~achievement_icon,
-    "Epic",            4,        "King Midas {event_year}",      "You won the most gold medals (gold_medals) in {event_year}!", "king_midas_epic.png"
+    "Epic",            4,        "King Midas {event_year}",      "You won the most gold medals ({gold_medals}) in {event_year}!", "king_midas_epic.png"
   )
   
-
+  # Filter for gold medal matches (finals where the fighter won)
   gold_medal_matches <- data %>%
-    dplyr::filter(.data$is_final==TRUE, .data$result == "WIN")
+    dplyr::filter(.data$is_final == TRUE, .data$result == "WIN")
+  
+  # Handle case where no gold medal matches exist
+  if (nrow(gold_medal_matches) == 0) {
+    return(data.frame(
+      fighter_id = double(0), tier_id = double(0), achieved = logical(0),
+      percentile = numeric(0), achievement_tier = character(0),
+      achievement_name = character(0), achievement_description = character(0),
+      achievement_icon = character(0), stringsAsFactors = FALSE
+    ))
+  }
   
   # Calculate the number of gold medals per fighter per year
   yearly_gold_counts <- gold_medal_matches %>%
     dplyr::group_by(event_year, fighter_id) %>%
     dplyr::summarize(gold_medals = dplyr::n_distinct(tournament_id), .groups = "drop")
   
-  # Identify the fighter with the most gold medals for each year
+  # Identify the fighter(s) with the most gold medals for each year
   yearly_midas <- yearly_gold_counts %>%
     dplyr::group_by(event_year) %>%
     dplyr::slice_max(gold_medals, with_ties = TRUE) %>%
@@ -58,16 +38,30 @@ ach_king_midas <- function(data) {
     dplyr::group_by(event_year) %>%
     dplyr::summarize(total_fighters_in_year = dplyr::n_distinct(fighter_id), .groups = "drop")
   
+  # Calculate cumulative counts for percentiles
+  tier_counts <- yearly_midas %>%
+    dplyr::group_by(event_year) %>%
+    dplyr::summarize(tier_count = dplyr::n(), .groups = "drop") %>%
+    dplyr::left_join(total_fighters, by = "event_year") %>%
+    dplyr::mutate(
+      percentile = ifelse(total_fighters_in_year == 0, 0, (tier_count / total_fighters_in_year) * 100)  # Percentile is proportion achieving the tier
+    )
+  
   # Join tier details and compute the achievement
   achievements <- yearly_midas %>%
     dplyr::left_join(tier_details, by = "tier_id") %>%
-    dplyr::left_join(total_fighters, by = "event_year") %>%
+    dplyr::left_join(tier_counts, by = "event_year") %>%
     dplyr::mutate(
-      percentile = 1 / total_fighters_in_year,
-      achievement_name=stringr::str_replace(achievement_name,"\\{event_year\\}",as.character(event_year)),
-      achievement_description = stringr::str_replace( achievement_description_template,"\\{event_year\\}", as.character(event_year))%>%
-                                stringr::str_replace("gold_medals", as.character(gold_medals))
-        ) %>%
+      achievement_name = stringr::str_replace(
+        achievement_name,
+        "\\{event_year\\}",as.character(event_year)
+      ),
+      achievement_description = stringr::str_replace(
+        achievement_description_template,
+        "\\{gold_medals\\}", as.character(gold_medals))%>%
+        stringr::str_replace( "\\{event_year\\}", as.character(event_year)
+      )
+    ) %>%
     dplyr::ungroup() %>%
     dplyr::select(
       fighter_id,
@@ -78,22 +72,7 @@ ach_king_midas <- function(data) {
       achievement_name,
       achievement_description,
       achievement_icon
-    ) %>%
-    dplyr::mutate(
-      fighter_id = as.double(fighter_id),  # Ensure correct type
-      tier_id = as.double(tier_id)        # Ensure correct type
     )
-  
-  # Handle case where no achievements exist
-  if (nrow(achievements) == 0) {
-    return(data.frame(
-      fighter_id = double(0), tier_id = double(0), achieved = logical(0),
-      percentile = numeric(0), achievement_tier = character(0),
-      achievement_name = character(0), achievement_description = character(0),
-      achievement_icon = character(0), stringsAsFactors = FALSE
-    ))
-  }
   
   return(achievements)
 }
-

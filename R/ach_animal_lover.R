@@ -1,35 +1,15 @@
-#' Animal Lover Achievement
-#'
-#' Identifies fighters who participated in tournaments featuring an animal mascot. Awards achievements based on the number of distinct tournaments attended in a given year.
-#'
-#' @param data A data frame containing HEMA tournament information. Required columns include:
-#'   - `fighter_id`: Unique identifier for each fighter.
-#'   - `event_year`: Year of the event.
-#'   - `event_id`: Unique identifier for events.
-#'   - `tournament_id`: Unique identifier for tournaments.
-#'   - `event_brand`: Event name or branding information.
-#' @return A data frame with the following columns:
-#'   - `fighter_id`: Unique identifier for each fighter.
-#'   - `tier_id`: Achievement tier level.
-#'   - `achieved`: Logical, indicating if the achievement was earned.
-#'   - `percentile`: Proportion of fighters achieving this tier in the dataset.
-#'   - `achievement_tier`: Name of the tier (e.g., Bronze).
-#'   - `achievement_name`: Name of the achievement.
-#'   - `achievement_description`: Description of the achievement with dynamic details.
-#'   - `achievement_icon`: Icon file associated with the achievement.
-#' @keywords internal
-#' @examples
-#' # Example usage:
-#' # ach_animal_lover(data)
 ach_animal_lover <- function(data) {
   # Define all tiers and their conditions in a single data frame
   tiers <- tibble::tribble(
-    ~achievement_tier, ~tier_id, ~achievement_name, ~achievement_description, ~achievement_icon,
+    ~achievement_tier, ~tier_id, ~achievement_name, ~achievement_description_template, ~achievement_icon,
     "Epic",            4,        "Animal Lover",    "You fought in {animal_tournaments} tournaments with an animal mascot!", "animal_lover_epic.png",
     "Gold",            3,        "Animal Lover",    "You fought in {animal_tournaments} tournaments with an animal mascot!", "animal_lover_gold.png",
     "Silver",          2,        "Animal Lover",    "You fought in {animal_tournaments} tournaments with an animal mascot!", "animal_lover_silver.png",
     "Bronze",          1,        "Animal Lover",    "You fought in {animal_tournaments} tournaments with an animal mascot!", "animal_lover_bronze.png"
   )
+  
+  # Filter out rows with missing event_brand or event_id
+  data <- data %>% dplyr::filter(!is.na(event_brand) & !is.na(event_id))
   
   # Normalize event names
   normalized_data <- data %>%
@@ -54,37 +34,70 @@ ach_animal_lover <- function(data) {
     dplyr::select(event_id) %>%
     dplyr::distinct()
   
-  # Count distinct animal tournaments per fighter per year
+  # Handle case where no animal-related events exist
+  if (nrow(animal_related_events) == 0) {
+    return(data.frame(
+      fighter_id = integer(0), tier_id = integer(0), achieved = logical(0),
+      percentile = numeric(0), achievement_tier = character(0),
+      achievement_name = character(0), achievement_description = character(0),
+      achievement_icon = character(0), stringsAsFactors = FALSE
+    ))
+  }
+  
+  # Count distinct animal tournaments per fighter
   achievement_data <- data %>%
     dplyr::semi_join(animal_related_events, by = "event_id") %>%
     dplyr::group_by(fighter_id) %>%
-    dplyr::summarise(animal_tournaments = n_distinct(event_brand), .groups = "drop") %>%
+    dplyr::summarize(animal_tournaments = n_distinct(event_brand), .groups = "drop") %>%
     dplyr::mutate(
       tier_id = dplyr::case_when(
-        animal_tournaments >= 8 ~ 4,
-        animal_tournaments >= 5 ~ 3,
-        animal_tournaments >= 3 ~ 2,
-        animal_tournaments >= 1 ~ 1,
+        animal_tournaments >= 8 ~ 4,  # Epic
+        animal_tournaments >= 5 ~ 3,  # Gold
+        animal_tournaments >= 3 ~ 2,  # Silver
+        animal_tournaments >= 1 ~ 1,  # Bronze
         TRUE ~ NA_integer_
       ),
       achieved = !is.na(tier_id)
     ) %>%
-    dplyr::filter(achieved) %>%
-    dplyr::mutate(percentile = n() / base::nrow(data %>% dplyr::distinct(fighter_id))) %>%
-    dplyr::left_join(tiers, by = "tier_id") %>%
-    dplyr::mutate(
-      achievement_description = stringr::str_replace_all(
-        achievement_description,
-        "\\{animal_tournaments\\}",
-        as.character(animal_tournaments)
-      )
-    ) %>%
-    dplyr::select(
-      fighter_id, tier_id, achieved, percentile, 
-      achievement_tier, achievement_name, 
-      achievement_description, achievement_icon
-    ) %>%
-    dplyr::filter(!is.na(achievement_name)) # Ensure valid achievements only
+    dplyr::filter(achieved)
   
-  return(achievement_data)
+  # Handle case where no fighters meet the criteria
+  if (nrow(achievement_data) == 0) {
+    return(data.frame(
+      fighter_id = integer(0), tier_id = integer(0), achieved = logical(0),
+      percentile = numeric(0), achievement_tier = character(0),
+      achievement_name = character(0), achievement_description = character(0),
+      achievement_icon = character(0), stringsAsFactors = FALSE
+    ))
+  }
+  
+  # Total fighters for percentile calculation
+  total_fighters <- dplyr::n_distinct(data$fighter_id)
+  
+  # Calculate cumulative counts for percentiles
+  tier_counts <- achievement_data %>%
+    dplyr::group_by(tier_id) %>%
+    dplyr::summarize(tier_count = dplyr::n(), .groups = "drop") %>%
+    dplyr::arrange(dplyr::desc(tier_id)) %>%
+    dplyr::mutate(cumulative_count = cumsum(tier_count))
+  
+  # Join tier details and calculate dynamic descriptions
+  achievements <- achievement_data %>%
+    dplyr::left_join(tiers, by = "tier_id") %>%
+    dplyr::left_join(tier_counts, by = "tier_id") %>%
+    dplyr::mutate(
+      achievement_description = achievement_description_template,
+      achieved = TRUE,
+      percentile = (1 - (cumulative_count / total_fighters)) * 100  # Correct percentile calculation
+    )
+  
+  achievements$achievement_description<-stringr::str_replace_all(achievements$achievement_description,"\\{animal_tournaments\\}", as.character(achievements$animal_tournaments) )
+  achievements<-achievements%>%
+    dplyr::select(
+      fighter_id, tier_id, achieved, percentile,
+      achievement_tier, achievement_name,
+      achievement_description, achievement_icon
+    )
+  
+  return(achievements)
 }

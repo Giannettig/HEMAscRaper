@@ -170,7 +170,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv = FALSE) {
     }
     
     # Reorder columns so they match the required order at the end
-    result <- result[, union(required_cols, names(result))]
+    result <- result[, union(required_cols, names(result))]%>%mutate(percentile=round(percentile,2))
     
     return(result)
   })

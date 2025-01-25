@@ -1,69 +1,87 @@
-
-#' The Revenant Achievement
-#'
-#' @description
-#' Internal function to award the "The Revenant" achievement based on returning to fight after periods of inactivity.
-#'
-#' Tiers:
-#' - Epic (tier_id=4): Returned after at least ten years of inactivity
-#' - Gold (tier_id=3): Returned after seven years of inactivity
-#' - Silver (tier_id=2): Returned after five years of inactivity
-#' - Bronze (tier_id=1): Returned after at least two years of inactivity
-#'
-#' The achievement description dynamically includes the actual interval of inactivity.
-#'
-#' @param data A data frame with at least the following columns:
-#' \describe{
-#'   \item{fighter_id}{Identifier of the fighter}
-#'   \item{match_id}{Identifier of the match}
-#'   \item{event_date}{Date of the event (as Date or character)}
-#' }
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{fighter_id}{ID of the fighter}
-#'   \item{tier_id}{Numeric tier ID (1-4)}
-#'   \item{achieved}{Logical, TRUE if achieved}
-#'   \item{percentile}{Proportion of fighters who achieved this tier or higher}
-#'   \item{achievement_tier}{"Bronze", "Silver", "Gold", or "Epic"}
-#'   \item{achievement_name}{"The Revenant"}
-#'   \item{achievement_description}{Includes the actual interval of inactivity in years}
-#'   \item{achievement_icon}{e.g., "the_revenant_bronze.png"}
-#' }
-#'
-#' @importFrom dplyr group_by summarize mutate filter ungroup left_join slice_max select arrange
-#' @importFrom tibble tribble
-#' @importFrom stringr str_replace
-#' @keywords internal
 ach_revenant <- function(data) {
   # Define all tiers and their conditions
-  tiers <- tribble(
-    ~achievement_tier, ~tier_id, ~achievement_name,       ~achievement_description,                                             ~achievement_icon,
-    "Bronze",           1,        "The Revenant",       "You come back to fight after at least two years of inactivity",       "bronze_revenant.png",
-    "Epic",             4,        "The Revenant",       "You come back to fight after ten years of inactivity",                "epic_revenant.png"
+  tiers <- tibble::tribble(
+    ~achievement_tier, ~tier_id, ~achievement_name,       ~achievement_description_template,                       ~achievement_icon,
+    "Bronze",          1,        "The Revenant",         "You came back to fight after {interval_years} years of inactivity!", "the_revenant_bronze.png",
+    "Silver",          2,        "The Revenant",         "You came back to fight after {interval_years} years of inactivity!", "the_revenant_silver.png",
+    "Gold",            3,        "The Revenant",         "You came back to fight after {interval_years} years of inactivity!", "the_revenant_gold.png",
+    "Epic",            4,        "The Revenant",         "You came back to fight after {interval_years} years of inactivity!", "the_revenant_epic.png"
   )
   
-  total_fighters <- data %>% distinct(fighter_id) %>% nrow() # Total unique fighters
+  # Total unique fighters for percentile calculation
+  total_fighters <- data %>% dplyr::distinct(fighter_id) %>% nrow()
   
+  # Calculate intervals between fights in years
   ach <- data %>%
-    select(fighter_id, event_date) %>%
-    distinct() %>%
-    arrange(fighter_id, event_date) %>%
-    group_by(fighter_id) %>%
-    mutate(interval_between_fights = as.numeric(event_date - lag(event_date), units = "days")) %>%
-    filter(!is.na(interval_between_fights)) %>%
-    summarize(max_interval = max(interval_between_fights, na.rm = TRUE)) %>%
-    mutate(
-      tier_id = case_when(
-        max_interval >= 3650 ~ 4,  # Epic tier (10 years)
-        max_interval >= 730 ~ 1,   # Bronze tier (2 years)
-        TRUE ~ NA_integer_
+    dplyr::select(fighter_id, event_date) %>%
+    dplyr::distinct() %>%
+    dplyr::arrange(fighter_id, event_date) %>%
+    dplyr::group_by(fighter_id) %>%
+    dplyr::mutate(
+      interval_between_fights = as.numeric(event_date - dplyr::lag(event_date), units = "days") / 365
+    ) %>%
+    dplyr::filter(!is.na(interval_between_fights)) %>%
+    dplyr::summarize(max_interval = max(interval_between_fights, na.rm = TRUE), .groups = "drop") %>%
+    dplyr::mutate(
+      tier_id = dplyr::case_when(
+        max_interval >= 10 ~ 4,  # Epic tier (10+ years)
+        max_interval >= 7  ~ 3,  # Gold tier (7+ years)
+        max_interval >= 5  ~ 2,  # Silver tier (5+ years)
+        max_interval >= 2  ~ 1,  # Bronze tier (2+ years)
+        TRUE               ~ NA_integer_
       ),
       achieved = !is.na(tier_id)
     ) %>%
-    filter(achieved) %>%
-    mutate(percentile = n() / total_fighters) %>% # Percentile calculation
-    left_join(tiers, by = "tier_id")%>%select(-max_interval)
+    dplyr::filter(achieved)
   
-  return(ach)
+  # Handle case where no achievements are found
+  if (nrow(ach) == 0) {
+    return(tibble::tibble(
+      fighter_id = integer(0),
+      tier_id = integer(0),
+      achieved = logical(0),
+      percentile = numeric(0),
+      achievement_tier = character(0),
+      achievement_name = character(0),
+      achievement_description = character(0),
+      achievement_icon = character(0)
+    ))
+  }
+  
+  # Calculate cumulative counts for percentiles
+  tier_counts <- ach %>%
+    dplyr::group_by(tier_id) %>%
+    dplyr::summarize(tier_count = dplyr::n(), .groups = "drop") %>%
+    dplyr::arrange(dplyr::desc(tier_id)) %>%
+    dplyr::mutate(cumulative_count = cumsum(tier_count))
+  
+  # Join cumulative counts back to achievements
+  ach <- ach %>%
+    dplyr::left_join(tier_counts, by = "tier_id") %>%
+    dplyr::mutate(
+      percentile = (cumulative_count / total_fighters) * 100 # Percent of fighters with the achievement
+    )
+  
+  # Join tier details and create descriptions
+  achievements <- ach %>%
+    dplyr::left_join(tiers, by = "tier_id") %>%
+    dplyr::mutate(
+      achievement_description = stringr::str_replace_all(
+        achievement_description_template, 
+        "\\{interval_years\\}", 
+        as.character(round(max_interval, 1))
+      )
+    ) %>%
+    dplyr::select(
+      fighter_id,
+      tier_id,
+      achieved,
+      percentile,
+      achievement_tier,
+      achievement_name,
+      achievement_description,
+      achievement_icon
+    )
+  
+  return(achievements)
 }
