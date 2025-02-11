@@ -9,28 +9,35 @@ A data frame with the following columns:
 \describe{
   \item{club_id}{Integer. Identifier for the fighter's club.}
   \item{debut_fight}{Logical. Indicates if this is the fighter's debut match.}
+  \item{event_date}{Date. The date when the event took place.}
   \item{event_id}{Integer. Identifier for the associated event.}
   \item{event_name}{Character. Name of the event.}
-  \item{is_final}{Character. True if the stage is a final or gold match}
+  \item{fighter_elo}{Numeric. Elo rating of the fighter before the match.}
+  \item{fighter_elo_gain}{Numeric. Change in the fighter's Elo rating after the match.}
   \item{fighter_id}{Integer. Identifier for the fighter.}
   \item{fighter_name}{Character. Name of the fighter.}
-  \item{match_id}{Integer. Unique identifier for each match.}
-  \item{opponent_id}{Integer. Identifier for the opponent.}
-  \item{opponent_name}{Character. Name of the opponent.}
-  \item{result}{Character. Outcome of the match for the fighter (e.g., Win, Loss).}
-  \item{stage}{Character. Stage of the tournament.}
+  \item{is_final}{Logical. TRUE if the match is a final stage match.}
+  \item{match_id}{Integer. Unique identifier for the match.}
+  \item{match_result_id}{Integer. Unique identifier for the match result record.}
+  \item{opponent_elo}{Numeric. Elo rating of the opponent before the match.}
+  \item{opponent_id}{Integer. Identifier for the opponent fighter.}
+  \item{opponent_name}{Character. Name of the opponent fighter.}
+  \item{result}{Character. Outcome of the match for the fighter (e.g., "Win" or "Loss").}
+  \item{stage}{Character. Stage of the tournament (e.g., "Pool", "Quarterfinal", "Final").}
   \item{tournament_category}{Character. Category of the tournament.}
   \item{tournament_id}{Integer. Identifier for the tournament.}
   \item{tournament_name}{Character. Name of the tournament.}
-  \item{tournament_note}{Character. Notes about the tournament.}
+  \item{tournament_note}{Character. Additional notes regarding the tournament.}
   \item{tournament_weapon}{Character. Weapon category used in the tournament.}
+  \item{win_chance}{Numeric. Estimated probability (or chance) of the fighter winning the match.}
 }
 }
 \usage{
 hema_match_results
 }
 \description{
-This dataset contains detailed results for individual HEMA matches, including match outcomes and metadata.
+This dataset contains detailed results for individual HEMA matches, including match outcomes,
+fighter ratings, and tournament metadata.
 }
 \examples{
 data(hema_match_results)

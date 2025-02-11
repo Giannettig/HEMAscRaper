@@ -86,7 +86,7 @@ get_ranking <- function(incremental = TRUE) {
   } else {
     # Fetch the base URLs only, label them with today's date
     hema_rankings <- purrr::map_df(ranking_urls, get_ranking_page, .progress = TRUE) %>%
-      dplyr::mutate(month_date = Sys.Date())
+      dplyr::mutate(month_date = Sys.Date())%>%mutate(source="Hema Ratings")
   }
   
   return(hema_rankings)

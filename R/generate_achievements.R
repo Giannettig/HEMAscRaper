@@ -72,7 +72,7 @@ generate_achievements <- function(path = "./hema_ratings", export_csv = FALSE) {
   data <- hema_match_results %>%
     dplyr::select(-club_id) %>%
     dplyr::left_join(hema_fighters, by = c("fighter_id", "fighter_name")) %>%
-    dplyr::left_join(hema_events, by = c("event_id", "event_name")) %>%
+    dplyr::left_join(hema_events%>%select(-event_date), by = c("event_id", "event_name")) %>%
     dplyr::left_join(hema_countries, by = c("event_country" = "name"))%>%select(-country_id) %>%
     dplyr::rename(
       event_region = "region",
@@ -152,7 +152,12 @@ generate_achievements <- function(path = "./hema_ratings", export_csv = FALSE) {
         warning(sprintf("Error in achievement function '%s': %s", name, e$message), call. = FALSE)
         NULL
       }
-    )
+    )%>%
+    mutate(fighters_total=n_distinct(fighter_id))%>%
+    group_by(achievement_tier,achievement_name)%>%
+    mutate(fighters_achieved=n_distinct(fighter_id))%>%
+    ungroup%>%
+    mutate(percentile= round((fighters_achieved/fighters_total),digits=4)*100)
     
     # If the function returned NULL or an empty data frame, record it and return an empty tibble
     if (is.null(result) || nrow(result) == 0) {

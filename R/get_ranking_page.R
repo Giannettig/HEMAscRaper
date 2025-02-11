@@ -17,7 +17,6 @@
 #' @importFrom dplyr tibble select bind_cols mutate left_join
 #' @importFrom stringr str_extract str_split_1 str_squish
 #' @importFrom snakecase to_snake_case
-#' @importFrom testthat expect_identical
 #' @keywords internal
 #' @examples
 #' \dontrun{
@@ -94,8 +93,11 @@ normalize_events <- function(web_page) {
       )
     }
 
-  # Verify that names in main_table and fighters_ids match
-  testthat::expect_identical(main_table$Name, fighters_ids$fighter_name)
+  if (!identical(main_table$Name, fighters_ids$fighter_name)) {
+    stop("Error: Names in main_table and fighters_ids do not match!")
+  } else {
+    message("Success: Names match.")
+  }
 
   return(list(main_table = main_table, fighters_ids = fighters_ids))
 }

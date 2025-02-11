@@ -3,40 +3,32 @@
 \docType{data}
 \name{hema_rankings}
 \alias{hema_rankings}
-\title{HEMA Fighter Rankings Dataset}
+\title{HEMA Rankings Dataset}
 \format{
-A tibble with the following columns:
+A data frame with 70,053 rows and 8 columns:
 \describe{
-  \item{rank}{An integer representing the fighter's rank in the competition.}
-  \item{fighter_id}{A numeric identifier uniquely assigned to each fighter.}
-  \item{fighter_name}{A character string indicating the name of the fighter.}
-  \item{category}{A character string describing the competition category (e.g., "Longsword (Mixed & Men's, Steel)").}
-  \item{month}{A character string representing the ranking period, such as "December 2024".}
-  \item{weighted_rating}{A numeric value representing the weighted rating of the fighter based on their performance.}
-  \item{club}{A character string indicating the club or academy the fighter represents.}
-  \item{month_date}{A date object representing the exact date of the ranking period (e.g., "2024-12-28").}
+  \item{rank}{Numeric. The ranking position of the fighter.}
+  \item{fighter_id}{Numeric. Unique identifier for the fighter.}
+  \item{fighter_name}{Character. Name of the fighter.}
+  \item{category}{Character. The competition category (e.g., "Longsword (Mixed & Men's, Steel)").}
+  \item{month}{Character. The month for which the ranking applies (e.g., "January 2025").}
+  \item{weighted_rating}{Numeric. The weighted rating score for the fighter.}
+  \item{club}{Character. The club with which the fighter is associated.}
+  \item{month_date}{Date. The reference date within the month (e.g., "2025-01-22").}
 }
 }
 \usage{
 hema_rankings
 }
 \description{
-A dataset containing rankings for historical European martial arts (HEMA) fighters, including their weighted ratings, club affiliations, and metadata such as competition categories and dates.
+This dataset contains monthly ranking information for HEMA fighters,
+including performance metrics and associated club information.
 }
 \details{
-This dataset provides detailed rankings of fighters participating in HEMA competitions. It includes their rank, weighted rating, associated club, and metadata about the competition's category and date. This dataset is particularly useful for analyzing fighter performance and tracking historical rankings across different periods.
+The dataset also includes a column specification attribute (`spec`) that details the expected
+column types and records any parsing problems encountered when reading the data.
 }
 \examples{
-\dontrun{
-  # View the first few rows of the dataset
-  head(hema_rankings)
-
-  # Filter fighters ranked in the top 5
-  dplyr::filter(hema_rankings, rank <= 5)
-
-  # Summarize the average weighted rating by category
-  dplyr::group_by(hema_rankings, category) \%>\%
-    dplyr::summarize(avg_rating = mean(weighted_rating, na.rm = TRUE))
-}
+str(hema_rankings)
 }
 \keyword{datasets}

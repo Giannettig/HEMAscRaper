@@ -32,22 +32,6 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
   hema_fighters <- get_fighters()
   hema_events   <- get_events()
   
-  # Incremental or non-incremental update of rankings
-  if (!incremental) {
-    hema_rankings <- get_ranking(incremental = FALSE)
-  } else if (file.exists(file.path(path, "hema_rankings.csv"))) {
-    hema_rankings <- readr::read_csv(file.path(path, "hema_rankings.csv"), show_col_types = FALSE)
-  } else {
-    hema_rankings <- HEMAscRaper::hema_rankings
-  }
-  
-  # If current date is different from the max date in the dataset, get new ranking data
-  # CHANGED: `.data$month_date`
-  if (Sys.Date() != max(hema_rankings$month_date)) {
-    new_rankings  <- get_ranking(incremental = TRUE)
-    hema_rankings <- dplyr::bind_rows(hema_rankings, new_rankings)
-  }
-  
   # Incremental or non-incremental update of fights
   if (!incremental) {
     hema_fights <- get_fights()
@@ -57,6 +41,16 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     # This assumes HEMAscRaper::hema_fights is loaded
     hema_fights <- hema_fights
   }
+  
+  # Incremental or non-incremental update of rankings
+  if (!incremental) {
+    hema_rankings <- get_ranking(incremental = FALSE)
+  } else if (file.exists(file.path(path, "hema_rankings.csv"))) {
+    hema_rankings <- readr::read_csv(file.path(path, "hema_rankings.csv"), show_col_types = FALSE)
+  } else {
+    hema_rankings <- HEMAscRaper::hema_rankings
+  }
+  
   
   # Find the latest year in fight data (based on event_name)
   # CHANGED: .data$event_name in pipeline
@@ -71,37 +65,70 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
   current_year <- as.integer(format(Sys.Date(), "%Y"))
   
   # Get missing years of data
-  new_fights <- get_fights(last_year:current_year)
+  new_fights <- get_fights(last_year:current_year)%>%
+    select(event_id, event_name, 
+           tournament_name,
+           tournament_category,
+           tournament_note, 
+           tournament_weapon, 
+           fighter_id, 
+           opponent_id, 
+           fighter_1, 
+           fighter_2 ,
+           fighter_1_result,
+           fighter_2_result,
+           stage)
   
   # Filter out fights already present
   # CHANGED: .data$event_id
   old_fights <- hema_fights %>%
-    dplyr::filter(!(.data$event_id %in% new_fights$event_id))
+    dplyr::filter(!(.data$event_id %in% new_fights$event_id))%>%
+    select(event_id, event_name, 
+                     tournament_name,
+                     tournament_category,
+                     tournament_note, 
+                     tournament_weapon, 
+                     fighter_id, 
+                     opponent_id, 
+                     fighter_1, 
+                     fighter_2 ,
+                     fighter_1_result,
+                     fighter_2_result,
+                     stage)
   
-  message("Adding last known rank to fighter data")
   
-  # CHANGED: .data$ in slice_max(), select(), filter()
   last_rank <- hema_rankings %>%
-    dplyr::slice_max(.data$month_date) %>%
-    dplyr::select(.data$fighter_id, .data$category, .data$rank, .data$weighted_rating) %>%
-    dplyr::filter(.data$category == "Longsword (Mixed & Men's, Steel)") %>%
+    dplyr::slice_max(month_date) %>%
+    dplyr::select(fighter_id, category, rank, weighted_rating) %>%
+    dplyr::filter(category == "Longsword (Mixed & Men's, Steel)") %>%
     tidyr::pivot_wider(
       names_from   = "category",             # typically pivot_wider can accept plain strings
       values_from  = c("rank", "weighted_rating")
     )
   
-  # Left-join last known rank to fighter data
-  hema_fighters <- hema_fighters %>%
-    dplyr::left_join(last_rank, by = "fighter_id")
   
   # Combine new and old fight data
   # CHANGED: group_by(.data$event_id, .data$tournament_name), .data$match_id
-  hema_fights <- dplyr::bind_rows(new_fights, old_fights) %>%
-    dplyr::group_by(.data$event_id, .data$tournament_name) %>%
+  hema_fights <- 
+    # init code
+    # hema_fights %>% select(-event_date)%>%
+    dplyr::bind_rows(new_fights, old_fights) %>% 
+    dplyr::group_by(event_id, tournament_name) %>%
     dplyr::mutate(tournament_id = dplyr::cur_group_id()) %>%
     dplyr::ungroup() %>%
-    dplyr::mutate(match_id = dplyr::row_number()) %>%
-    dplyr::select(.data$match_id, .data$tournament_id, .data$event_id, dplyr::everything())
+    dplyr::left_join(hema_events%>%select(event_id,event_date),by = join_by(event_id))%>%
+    dplyr::arrange(event_date, event_id)%>%
+    dplyr::mutate(match_id = dplyr::row_number(),
+                  
+                  tournament_category = case_when(
+                      str_detect(tournament_category, "Mixed|Men's") ~ "Mixed & Men's",
+                      TRUE ~ tournament_category  # Retain the original category for other cases
+                    
+                  )
+                  )%>%
+    dplyr::select(match_id, tournament_id, event_id, event_date,dplyr::everything())%>%
+    generate_ratings()
+  
   
   message("Refining HEMA Matches")
   
@@ -115,25 +142,41 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
           result,
           fighter_name  = fighter_1,
           opponent_name = fighter_2,
-          result        = fighter_1_result
+          result        = fighter_1_result,
+          win_chance    = win_chance_1,
+          fighter_elo_gain      = update_1,
+          fighter_elo   = elo_1,
+          opponent_elo  = elo_2
         ) %>%
-          dplyr::select(-fighter_2_result),
+          dplyr::select(-fighter_2_result,-update_2, -win_chance_2),
         dplyr::rename(
           result,
           fighter_id    = opponent_id,
           opponent_id   = fighter_id,
           fighter_name  = fighter_2,
           opponent_name = fighter_1,
-          result        = fighter_2_result
+          result        = fighter_2_result,
+          win_chance    = win_chance_2,
+          fighter_elo_gain      = update_2,
+          fighter_elo   = elo_2,
+          opponent_elo  = elo_1
         ) %>%
-          dplyr::select(-fighter_1_result)
+          dplyr::select(-fighter_1_result, -update_1,-win_chance_1)
       )
     } %>%
+    dplyr::arrange(.data$fighter_id, .data$event_id, .data$match_id) %>%
     dplyr::mutate(
-      match_id  = dplyr::row_number(),
-      is_final  = stringr::str_detect(
-        stringr::str_to_lower(.data$stage),
+      match_result_id = row_number(),
+      is_final = str_detect(
+        str_to_lower(stage),
         "^(final|grand final|gold|gold (meda|final|match|medal.*|round \\d+|silver match|.*))$"
+      ),
+      is_final = replace_na(is_final, FALSE),
+      stage_type = case_when(
+        is_final & result == "WIN" ~ "Gold",
+        is_final & result == "LOSS" ~ "Silver",
+        str_detect(str_to_lower(stage), "bronze") & result == "WIN" ~ "Bronze",
+        TRUE ~ NA_character_
       )
     ) %>%
     dplyr::left_join(
@@ -142,12 +185,12 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     ) %>%
     dplyr::rename(club_id = .data$fighter_club_id) %>%
     dplyr::group_by(.data$fighter_id, .data$fighter_name) %>%
-    dplyr::arrange(.data$fighter_id, .data$event_id) %>%
     dplyr::mutate(debut_fight = dplyr::row_number() == 1) %>%
     dplyr::ungroup() %>%
     # Here we select columns by numeric index (1:9) plus newly created columns:
     # If you prefer, you can do `select(.data$match_id, .data$tournament_id, ... )` explicitly
-    dplyr::select(1:9, .data$is_final, .data$club_id, dplyr::everything())
+    dplyr::select(match_result_id, dplyr::everything())
+  
   
   message("Refining HEMA Tournaments")
   
@@ -168,6 +211,9 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
       .groups       = "drop"
     )
   
+  message("calculating HEMA Achievements")
+  hema_achievements<-generate_achievements(path, FALSE)
+  
   # Save data as CSV files
   # (Make sure `hema_countries` is defined somewhere globally or in the package)
   data_list <- list(
@@ -178,7 +224,8 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     hema_fights        = hema_fights,
     hema_match_results = hema_match_results,
     hema_tournaments   = hema_tournaments,
-    hema_rankings      = hema_rankings
+    hema_rankings      = hema_rankings,
+    hema_achievements  = hema_achievements
   )
   
   if (!dir.exists(path)) {
@@ -192,6 +239,7 @@ refresh_hema_data <- function(incremental = TRUE, path = "./hema_ratings") {
     readr::write_csv(data_list[[name]], file = file_path, na = "", quote="all")
   })
   
-  message("calculating HEMA Achievements")
-  generate_achievements(path, TRUE)
+ generate_new_model(data_list, path)
+
+ invisible(NULL)
 }

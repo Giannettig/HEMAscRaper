@@ -92,25 +92,33 @@
 
 #' HEMA Fights Dataset
 #'
-#' This dataset contains information about individual HEMA fights, including the fighters involved and outcomes.
+#' This dataset contains information about individual HEMA fights, including the fighters involved,
+#' their performance metrics, and match outcomes.
 #'
 #' @format A data frame with the following columns:
 #' \describe{
 #'   \item{match_id}{Integer. Unique identifier for each match.}
 #'   \item{event_id}{Integer. Identifier for the event in which the match took place.}
 #'   \item{event_name}{Character. Name of the event.}
+#'   \item{event_date}{Date. Date of the event.}
 #'   \item{fighter_1}{Character. Name of the first fighter.}
-#'   \item{fighter_1_result}{Character. Result of the fight for the first fighter (e.g., Win, Loss).}
+#'   \item{fighter_1_result}{Character. Result of the match for the first fighter (e.g., "Win", "Loss").}
 #'   \item{fighter_2}{Character. Name of the second fighter.}
-#'   \item{fighter_2_result}{Character. Result of the fight for the second fighter.}
-#'   \item{fighter_id}{Integer. ID of the fighter.}
-#'   \item{opponent_id}{Integer. ID of the opponent.}
+#'   \item{fighter_2_result}{Character. Result of the match for the second fighter.}
+#'   \item{fighter_id}{Integer. Identifier for the primary fighter associated with the match record.}
+#'   \item{opponent_id}{Integer. Identifier for the opponent fighter.}
 #'   \item{stage}{Character. Stage of the tournament.}
 #'   \item{tournament_category}{Character. Category of the tournament.}
-#'   \item{tournament_id}{Integer. ID of the tournament.}
+#'   \item{tournament_id}{Integer. Identifier for the tournament.}
 #'   \item{tournament_name}{Character. Name of the tournament.}
-#'   \item{tournament_note}{Character. Notes about the tournament.}
+#'   \item{tournament_note}{Character. Additional notes regarding the tournament.}
 #'   \item{tournament_weapon}{Character. Weapon category used in the tournament.}
+#'   \item{elo_1}{Numeric. Elo rating of fighter 1.}
+#'   \item{elo_2}{Numeric. Elo rating of fighter 2.}
+#'   \item{update_1}{Numeric. Updated metric 1 (please adjust the description as needed).}
+#'   \item{update_2}{Numeric. Updated metric 2 (please adjust the description as needed).}
+#'   \item{win_chance_1}{Numeric. Win chance for fighter 1 (expressed as a proportion or percentage).}
+#'   \item{win_chance_2}{Numeric. Win chance for fighter 2 (expressed as a proportion or percentage).}
 #' }
 #'
 #' @examples
@@ -120,27 +128,34 @@
 
 #' HEMA Match Results Dataset
 #'
-#' This dataset contains detailed results for individual HEMA matches, including match outcomes and metadata.
+#' This dataset contains detailed results for individual HEMA matches, including match outcomes,
+#' fighter ratings, and tournament metadata.
 #'
 #' @format A data frame with the following columns:
 #' \describe{
 #'   \item{club_id}{Integer. Identifier for the fighter's club.}
 #'   \item{debut_fight}{Logical. Indicates if this is the fighter's debut match.}
+#'   \item{event_date}{Date. The date when the event took place.}
 #'   \item{event_id}{Integer. Identifier for the associated event.}
 #'   \item{event_name}{Character. Name of the event.}
-#'   \item{is_final}{Character. True if the stage is a final or gold match}
+#'   \item{fighter_elo}{Numeric. Elo rating of the fighter before the match.}
+#'   \item{fighter_elo_gain}{Numeric. Change in the fighter's Elo rating after the match.}
 #'   \item{fighter_id}{Integer. Identifier for the fighter.}
 #'   \item{fighter_name}{Character. Name of the fighter.}
-#'   \item{match_id}{Integer. Unique identifier for each match.}
-#'   \item{opponent_id}{Integer. Identifier for the opponent.}
-#'   \item{opponent_name}{Character. Name of the opponent.}
-#'   \item{result}{Character. Outcome of the match for the fighter (e.g., Win, Loss).}
-#'   \item{stage}{Character. Stage of the tournament.}
+#'   \item{is_final}{Logical. TRUE if the match is a final stage match.}
+#'   \item{match_id}{Integer. Unique identifier for the match.}
+#'   \item{match_result_id}{Integer. Unique identifier for the match result record.}
+#'   \item{opponent_elo}{Numeric. Elo rating of the opponent before the match.}
+#'   \item{opponent_id}{Integer. Identifier for the opponent fighter.}
+#'   \item{opponent_name}{Character. Name of the opponent fighter.}
+#'   \item{result}{Character. Outcome of the match for the fighter (e.g., "Win" or "Loss").}
+#'   \item{stage}{Character. Stage of the tournament (e.g., "Pool", "Quarterfinal", "Final").}
 #'   \item{tournament_category}{Character. Category of the tournament.}
 #'   \item{tournament_id}{Integer. Identifier for the tournament.}
 #'   \item{tournament_name}{Character. Name of the tournament.}
-#'   \item{tournament_note}{Character. Notes about the tournament.}
+#'   \item{tournament_note}{Character. Additional notes regarding the tournament.}
 #'   \item{tournament_weapon}{Character. Weapon category used in the tournament.}
+#'   \item{win_chance}{Numeric. Estimated probability (or chance) of the fighter winning the match.}
 #' }
 #'
 #' @examples
@@ -180,34 +195,6 @@
 #' head(test_data)
 "test_data"
 
-#' @title HEMA Fighter Rankings Dataset
-#' @description A dataset containing rankings for historical European martial arts (HEMA) fighters, including their weighted ratings, club affiliations, and metadata such as competition categories and dates.
-#' @format A tibble with the following columns:
-#' \describe{
-#'   \item{rank}{An integer representing the fighter's rank in the competition.}
-#'   \item{fighter_id}{A numeric identifier uniquely assigned to each fighter.}
-#'   \item{fighter_name}{A character string indicating the name of the fighter.}
-#'   \item{category}{A character string describing the competition category (e.g., "Longsword (Mixed & Men's, Steel)").}
-#'   \item{month}{A character string representing the ranking period, such as "December 2024".}
-#'   \item{weighted_rating}{A numeric value representing the weighted rating of the fighter based on their performance.}
-#'   \item{club}{A character string indicating the club or academy the fighter represents.}
-#'   \item{month_date}{A date object representing the exact date of the ranking period (e.g., "2024-12-28").}
-#' }
-#' @details This dataset provides detailed rankings of fighters participating in HEMA competitions. It includes their rank, weighted rating, associated club, and metadata about the competition's category and date. This dataset is particularly useful for analyzing fighter performance and tracking historical rankings across different periods.
-#' @examples
-#' \dontrun{
-#'   # View the first few rows of the dataset
-#'   head(hema_rankings)
-#'
-#'   # Filter fighters ranked in the top 5
-#'   dplyr::filter(hema_rankings, rank <= 5)
-#'
-#'   # Summarize the average weighted rating by category
-#'   dplyr::group_by(hema_rankings, category) %>%
-#'     dplyr::summarize(avg_rating = mean(weighted_rating, na.rm = TRUE))
-#' }
-"hema_rankings"
-
 #' @title HEMA Achievements Dataset
 #' @description A dataset containing detailed information on HEMA fighters' achievements, including tier levels, percentiles, and dynamic descriptions of their accomplishments.
 #' @format A tibble with 8 columns:
@@ -223,3 +210,28 @@
 #' }
 #' @details This dataset is generated as part of the HEMA Analyzer system and provides detailed insights into the achievements of fighters in various competitions. Achievements are dynamically generated based on specific criteria such as participation in tournaments, victories, and diversity of competition regions.
 "hema_achievements"
+
+#' HEMA Rankings Dataset
+#'
+#' This dataset contains monthly ranking information for HEMA fighters,
+#' including performance metrics and associated club information.
+#'
+#' @format A data frame with 70,053 rows and 8 columns:
+#' \describe{
+#'   \item{rank}{Numeric. The ranking position of the fighter.}
+#'   \item{fighter_id}{Numeric. Unique identifier for the fighter.}
+#'   \item{fighter_name}{Character. Name of the fighter.}
+#'   \item{category}{Character. The competition category (e.g., "Longsword (Mixed & Men's, Steel)").}
+#'   \item{month}{Character. The month for which the ranking applies (e.g., "January 2025").}
+#'   \item{weighted_rating}{Numeric. The weighted rating score for the fighter.}
+#'   \item{club}{Character. The club with which the fighter is associated.}
+#'   \item{month_date}{Date. The reference date within the month (e.g., "2025-01-22").}
+#' }
+#'
+#' @details
+#' The dataset also includes a column specification attribute (`spec`) that details the expected
+#' column types and records any parsing problems encountered when reading the data.
+#'
+#' @examples
+#' str(hema_rankings)
+"hema_rankings"

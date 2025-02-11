@@ -90,3 +90,24 @@ utils::globalVariables(c(
   "tier_id", "percentile", "achievement_tier", "achievement_icon", 
   "final_matches", "wins", "losses", "event_year", "fighter_id"
 ))
+
+
+utils::globalVariables(c(
+  "achievement_id", "alpha-3", "alpha_2", "category", "category_id",
+  "category_source", "category_source_id", "club", "club_country_id",
+  "club_source", "club_source_id", "country-code", "country_code", "country_id",
+  "created_at", "cumulative_count", "debut_date", "debut_fight", "deleted",
+  "distinct_countries", "distinct_scenes", "elo.A", "elo.B", "elo_1", "elo_2",
+  "event_country_id", "event_source", "event_source_id", "fencer_population",
+  "fighter1_score", "fighter_count", "fighter_debut_fight", "fighter_elo",
+  "fighter_elo_gain", "fighter_source", "fighter_source_id", "fighter_win_chance",
+  "fighters_achieved", "fighters_ids", "fighters_total", "first_tournament_date",
+  "hema_scene", "hema_scene_id", "intermediate-region", "intermediate_region",
+  "is_final", "main_table", "match_date", "match_result_id", "max_year", "min_year",
+  "month_date", "name", "opponent_elo", "p.A", "problem", "ranking_category",
+  "ranking_source", "ranking_source_id", "rating_id", "result_id", "result_source",
+  "stage_type", "tier_count", "tournament_source", "tournament_source_id",
+  "update.A", "update.B", "update_1", "update_2", "updated_at", "weapon_id",
+  "weapon_source", "weapon_source_id", "weighted_rating", "win_chance", "win_chance_1",
+  "win_chance_2", "wins.A"
+))
